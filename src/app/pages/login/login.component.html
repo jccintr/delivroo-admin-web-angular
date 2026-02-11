@@ -1,0 +1,46 @@
+
+<main class="flex-grow flex flex-col items-center justify-center px-8 pt-8 w-full">
+    <div class="w-full max-w-sm flex flex-col items-center">
+        <div class="mb-10 flex flex-col items-center text-center">
+            <div class="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center shadow-xl shadow-primary/20 mb-5">
+                <span class="material-icons text-white text-5xl">lunch_dining</span>
+            </div>
+            <h1 class="text-2xl font-bold text-background-dark ">Delivroo <span class="text-primary">Admin</span></h1>
+            <p class="text-background-dark/60  text-sm mt-2">Acesse o painel de gerenciamento</p>
+        </div>
+        <div class="w-full">
+            <form action="#" class="space-y-4">
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-background-dark/50 ml-1" for="email">E-mail</label>
+                    <div class="relative">
+                        <span class="material-icons absolute left-4 top-1/2 -translate-y-1/2 text-background-dark/40 dark:text-white/40">mail_outline</span>
+                        <input class="w-full pl-12 pr-4 py-4 bg-white  border border-primary/10  rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-background-dark dark:text-white placeholder:text-background-dark/30 dark:placeholder:text-white/30 shadow-sm" id="email" name="email" placeholder="exemplo@delivroo.com" required="" type="email"/>
+                    </div>
+                </div>
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-background-dark/50 ml-1" for="password">Senha</label>
+                    <div class="relative">
+                        <span class="material-icons absolute left-4 top-1/2 -translate-y-1/2 text-background-dark/40 ">lock_outline</span>
+                        <input class="w-full pl-12 pr-12 py-4 bg-white  border border-primary/10  rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-background-dark dark:text-white placeholder:text-background-dark/30 dark:placeholder:text-white/30 shadow-sm" id="password" name="password" placeholder="••••••••" required="" [type]="showPassword ? 'text' : 'password'"/>
+                        <button (click)="togglePasswordVisibility()" class="absolute right-4 top-1/2 -translate-y-1/2 text-background-dark/40  hover:text-primary transition-colors" type="button">
+                            <span class="material-icons text-xl">{{ showPassword ? 'visibility' : 'visibility_off' }}</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex justify-end pt-1">
+                    <a class="text-sm font-semibold text-primary hover:text-primary/80 transition-colors" href="#">Esqueceu sua senha?</a>
+                </div>
+                <button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-2xl shadow-lg shadow-primary/30 transition-all active:scale-[0.98] flex items-center justify-center space-x-2 mt-6" type="submit">
+                    <span>Entrar</span>
+                    <span class="material-icons text-xl">login</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
+<footer class="shrink-0 pb-8 pt-4 px-8 flex flex-col items-center space-y-4">
+    <div class="flex flex-col items-center text-[10px] text-background-dark/40 text-center leading-relaxed font-medium">
+        <p>© 2023 Delivroo Brasil. Todos os direitos reservados.</p>
+        <p>Precisa de ajuda? <a class="text-primary font-bold" href="#">Contate o Suporte</a></p>
+    </div>
+</footer>
