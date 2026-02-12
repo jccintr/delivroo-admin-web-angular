@@ -1,1 +1,101 @@
-<p>dashboard works!</p>
+<div class="p-6  lg:p-8 min-h-screen  bg-gray-50">
+
+  <!-- Cabeçalho do Dashboard -->
+  <div class="mb-8">
+    <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 ">Dashboard</h1>
+    <p class="text-gray-600 mt-1">Visão geral da sua loja hoje</p>
+  </div>
+
+  <!-- Grid principal com cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <!-- Card 1: Status da Loja -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200  p-6 flex flex-col">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-700 ">Status da Loja</h3>
+        <span class="material-icons text-gray-400">storefront</span>
+      </div>
+      
+      <div class="flex items-center gap-3 mt-auto">
+        @if (isOpen()) {
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 ">
+            <span class="w-3 h-3 rounded-full bg-green-500 mr-2 animate-pulse"></span>
+            Aberta
+          </span>
+        } @else {
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 ">
+            <span class="w-3 h-3 rounded-full bg-red-500 mr-2"></span>
+            Fechada
+          </span>
+        }
+        
+        <button 
+          (click)="onToggleStatus()"
+          class="ml-auto text-sm text-primary hover:text-primary/80 font-medium transition-colors"
+        >
+          {{ isOpen() ? 'Fechar loja' : 'Abrir loja' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Card 2: Tempo de Espera -->
+    <div class="bg-white  rounded-xl shadow-sm border border-gray-200  p-6">
+
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-700 ">Tempo de Espera</h3>
+        <span class="material-icons text-gray-400">timer</span>
+      </div>
+      <div class="text-4xl font-bold text-gray-900 ">{{ tempoEspera() }}</div>
+      <div class="flex justify-end">
+        <button 
+            (click)="onToggleStatus()" 
+            class="ml-auto text-sm text-primary hover:text-primary/80 font-medium transition-colors"
+            >
+            Alterar
+        </button>
+      </div>
+    </div>
+
+    <!-- Card 3: Pedidos Recebidos -->
+    <div class="bg-white  rounded-xl shadow-sm border border-gray-200  p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-700 ">Pedidos Recebidos</h3>
+        <span class="material-icons text-gray-400">shopping_cart</span>
+      </div>
+      <div class="text-4xl font-bold text-blue-600 ">{{ pedidosRecebidos() }}</div>
+      <p class="text-sm text-gray-500  mt-1">hoje</p>
+    </div>
+
+    <!-- Card 4: Pedidos Entregues -->
+    <div class="bg-white  rounded-xl shadow-sm border border-gray-200  p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-700 ">Pedidos Entregues</h3>
+        <span class="material-icons text-gray-400">delivery_dining</span>
+      </div>
+      <div class="text-4xl font-bold text-green-600 ">{{ pedidosEntregues() }}</div>
+      <p class="text-sm text-gray-500  mt-1">hoje</p>
+    </div>
+
+    <!-- Card 5: Pedidos Retirados -->
+    <div class="bg-white  rounded-xl shadow-sm border border-gray-200  p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-700 ">Pedidos Retirados</h3>
+        <span class="material-icons text-gray-400">directions_walk</span>
+      </div>
+      <div class="text-4xl font-bold text-purple-600 ">{{ pedidosRetirados() }}</div>
+      <p class="text-sm text-gray-500  mt-1">hoje</p>
+    </div>
+
+    <!-- Card 6: Faturamento Total -->
+    <div class="bg-white  rounded-xl shadow-sm border border-gray-200  p-6 lg:col-span-2 xl:col-span-1">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-700 ">Faturamento Total</h3>
+        <span class="material-icons text-gray-400">attach_money</span>
+      </div>
+      <div class="text-4xl font-bold text-emerald-600 ">R$ {{ faturamentoTotal().toFixed(2).replace('.', ',') }}</div>
+      <p class="text-sm text-gray-500  mt-1">hoje</p>
+    </div>
+
+  </div>
+
+</div>
