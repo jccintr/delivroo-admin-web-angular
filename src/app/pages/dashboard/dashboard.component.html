@@ -38,23 +38,33 @@
       </div>
     </div>
 
-    <!-- Card 2: Tempo de Espera -->
-    <div class="bg-white  rounded-xl shadow-sm border border-gray-200  p-6">
-
+   <!-- Card 2: Tempo de Espera -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold text-gray-700 ">Tempo de Espera</h3>
+        <h3 class="text-lg font-semibold text-gray-700">Tempo de Espera</h3>
         <span class="material-icons text-gray-400">timer</span>
       </div>
-      <div class="text-4xl font-bold text-gray-900 ">{{ tempoEspera() }}</div>
-      <div class="flex justify-end">
+      
+      <div class="text-4xl font-bold text-gray-900">{{ tempoEspera() }}</div>
+      
+      <div class="flex justify-end mt-4">
         <button 
-            (click)="onToggleStatus()" 
-            class="ml-auto text-sm text-primary hover:text-primary/80 font-medium transition-colors"
-            >
-            Alterar
+          (click)="openWaitTimeModal()"
+          class="text-sm text-primary hover:text-primary/80 font-medium transition-colors"
+        >
+          Alterar
         </button>
       </div>
     </div>
+
+    <!-- Modal -->
+      @if (showWaitTimeModal()) {
+        <app-modal-wait-time 
+            [initialValue]="tempoEspera()"
+            (close)="closeWaitTimeModal()"
+            (saved)="onWaitTimeSaved($event)"
+        />
+      }
 
     <!-- Card 3: Pedidos Recebidos -->
     <div class="bg-white  rounded-xl shadow-sm border border-gray-200  p-6">
