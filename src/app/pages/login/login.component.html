@@ -1,12 +1,15 @@
 
-<main class="grow flex flex-col items-center justify-center px-8 pt-8 w-full">
+<main class="grow flex flex-col items-center justify-center px-8 pt-12 w-full">
     <div class="w-full max-w-sm flex flex-col items-center">
+         <div class="flex items-center gap-2">
+          <div class="flex items-center justify-center size-8 rounded-full bg-primary/10 text-primary">
+             <span class="material-symbols-outlined text-2xl text-primary">lunch_dining</span>
+          </div>
+          <h1 class="text-2xl font-extrabold tracking-tight text-primary">Delivroo</h1>
+        </div>
         <div class="mb-10 flex flex-col items-center text-center">
-            <div class="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center shadow-xl shadow-primary/20 mb-5">
-                <span class="material-icons text-white text-5xl">lunch_dining</span>
-            </div>
-            <h1 class="text-2xl font-bold text-background-dark ">Delivroo <span class="text-primary">Admin</span></h1>
-            <p class="text-background-dark/60  text-sm mt-2">Acesse o painel de gerenciamento</p>
+           
+            <p class="text-background-dark/60  text-base mt-2">Painel de Gerenciamento</p>
         </div>
         <div class="w-full">
             <form action="#" class="space-y-4">
@@ -71,8 +74,8 @@
     </div>
 </main>
 <footer class="shrink-0 pb-8 pt-4 px-8 flex flex-col items-center space-y-4">
-    <div class="flex flex-col items-center text-[10px] text-background-dark/40 text-center leading-relaxed font-medium">
-        <p>© 2023 Delivroo Brasil. Todos os direitos reservados.</p>
-        <p>Precisa de ajuda? <a class="text-primary font-bold" href="#">Contate o Suporte</a></p>
+    <div class="flex flex-col items-center text-sm text-background-dark/50 text-center leading-relaxed font-medium">
+        <p>© {{ this.year }} JC Software. Todos os direitos reservados.</p>
+       
     </div>
 </footer>

@@ -1,1 +1,10 @@
-<p>home works!</p>
+<div class="flex flex-row">
+   <app-sidebar 
+      [logotipo]="logotipo" 
+      [storeName]="storeName">
+   </app-sidebar> 
+   <div class="ml-64">
+      <router-outlet></router-outlet>
+   </div>
+</div>
+

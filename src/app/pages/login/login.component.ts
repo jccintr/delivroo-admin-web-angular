@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoginResponse } from '../../models/auth/login-response.interface';
 import { firstValueFrom } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -14,14 +15,16 @@ import { firstValueFrom } from 'rxjs';
 })
 export class LoginComponent {
 
+
   showPassword = false;
   email = signal<string>('');
   password = signal<string>('');
   errorMessage: string | null = null;
   loginResponse: LoginResponse | null = null;
   isLoading = signal<boolean>(false);
+  year = new Date().getFullYear();
 
-   constructor(private storeService: StoreService,private router: Router) {
+   constructor(private storeService: StoreService,private router: Router,private authService: AuthService) {
    }
 
   togglePasswordVisibility() {
@@ -40,8 +43,11 @@ export class LoginComponent {
 
    this.isLoading.set(true);
    try {
-     
       this.loginResponse = await firstValueFrom(this.storeService.login({ email: this.email(), password: this.password() }));
+      this.authService.setUser(this.loginResponse);
+      this.email.set('');
+      this.password.set('');
+      this.router.navigate(['/dashboard'], { replaceUrl: true });
       console.log('Login successful:', this.loginResponse);
       console.log('Login response:', this.loginResponse);
     } catch (error) {
