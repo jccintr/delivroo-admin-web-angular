@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { StoreService } from '../../services/store.service';
 import { FormsModule } from '@angular/forms';
 
@@ -20,13 +20,18 @@ export class ModalWaitTimeComponent {
   @Output() saved = new EventEmitter<string>();
 
   tempoEspera = '';
+  isSaving = signal(false);
 
   onCancel() {
+    if (this.isSaving()) return;
     this.close.emit();
   }
 
   async onSave() {
-    if (!this.tempoEspera?.trim()) return;
+
+    if (!this.tempoEspera?.trim() || this.isSaving()) return;
+
+    this.isSaving.set(true);
 
     try {
       const request = { tempo_espera: this.tempoEspera.trim() };
@@ -41,6 +46,8 @@ export class ModalWaitTimeComponent {
       console.error('Erro ao atualizar tempo de espera:', error);
       // Aqui você pode mostrar um toast/erro para o usuário
       alert('Não foi possível atualizar o tempo de espera. Tente novamente.');
+    } finally {
+      this.isSaving.set(false);
     }
   }
 
