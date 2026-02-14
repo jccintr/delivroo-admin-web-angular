@@ -37,22 +37,36 @@ export class PedidosComponent implements OnInit {
   */
 }
 
-excluirPedido(id: string | number | undefined) {
-  /*
-  if (!id || !confirm('Deseja realmente excluir este pedido?')) return;
+private getTotalExibido(pedido: PedidosResponse): number {
+    let total = pedido.total ?? 0;
 
-  this.storeService.excluirPedido(id).subscribe({
-    next: () => {
-      this.pedidos = this.pedidos.filter(p => p.id !== id);
-      alert('Pedido excluído com sucesso!');
-    },
-    error: (err) => {
-      console.error('Erro ao excluir:', err);
-      alert('Erro ao excluir o pedido.');
+    if (pedido.delivery !== true) {
+      return total;
     }
-  });
-  */
-}
+
+    // Tenta converter taxa_entrega (string) para número
+    const taxaStr = (pedido.taxa_entrega || '0').trim();
+    let taxa = 0;
+
+    // Substitui vírgula por ponto (muito comum no Brasil)
+    const taxaLimpa = taxaStr.replace(',', '.');
+
+    // Converte para número
+    const parsed = parseFloat(taxaLimpa);
+
+    if (!isNaN(parsed) && isFinite(parsed)) {
+      taxa = parsed;
+    } else {
+      console.warn(`Não foi possível converter taxa_entrega: "${taxaStr}" para número`);
+    }
+
+    return total + taxa;
+  }
+
+  getTotalExibidoFormatado(pedido: PedidosResponse): string {
+    const valor = this.getTotalExibido(pedido);
+    return valor.toFixed(2).replace('.', ',');
+  }
 
 
   }

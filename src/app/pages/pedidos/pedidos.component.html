@@ -55,7 +55,7 @@
 
           <!-- Total (alinhado direita) -->
           <td class="whitespace-nowrap px-6 py-5 text-sm font-semibold text-gray-900 text-right">
-            {{ pedido.total.toFixed(2).replace('.', ',') }}
+            {{ getTotalExibidoFormatado(pedido) }}
           </td>
 
           <!-- Status -->
