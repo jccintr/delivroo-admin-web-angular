@@ -8,6 +8,8 @@ import { AuthService } from './auth.service';
 import { UpdateWaitTimeRequest } from '../models/dashboard/updateWaitTime-request.interface';
 import { UpdateWaitTimeResponse } from '../models/dashboard/updateWaitTime-response';
 import { toggleStatusResponse } from '../models/dashboard/toggleStatus-response.interface';
+import { PedidosResponse } from '../models/pedidos/pedidos-response.interface';
+
 
 
 
@@ -39,7 +41,6 @@ export class StoreService {
   }
 
   getDashboardData(): Observable<DashboardResponse> {
-     console.log('token',this.authService.token);
     return this.http.get<DashboardResponse>(`${this.BASE_API}/pedidosresumo`, {
       headers: {
         Accept: 'application/json',
@@ -47,6 +48,16 @@ export class StoreService {
         'Authorization': 'Bearer ' + this.authService.token()
       },
     }); 
+  }
+
+  getPedidos(): Observable<PedidosResponse[]> {
+      return this.http.get<PedidosResponse[]>(`${this.BASE_API}/pedidos`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.authService.token()
+        },
+      }); 
   }
 
   getWaitTime(){
