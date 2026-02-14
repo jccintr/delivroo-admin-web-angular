@@ -4,72 +4,94 @@
     <p class="text-gray-600 mt-1">Gerencie os pedidos da sua loja</p>
   </div>
 
-  <!-- Estado de carregamento / vazio -->
+  <!-- Estado vazio -->
   <div *ngIf="!pedidos || pedidos.length === 0" class="text-center py-16 text-gray-500">
     <p class="text-lg">Nenhum pedido encontrado no momento.</p>
     <p class="mt-2">Novos pedidos aparecerão aqui automaticamente.</p>
   </div>
 
-  <!-- Tabela de pedidos -->
+  <!-- Tabela -->
   <div *ngIf="pedidos && pedidos.length > 0" class="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-50">
         <tr>
           <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Pedido</th>
-          <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Cliente</th>
           <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Data</th>
-          <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Total</th>
+          <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Cliente</th>
+          <th scope="col" class="px-6 py-4 text-center text-sm font-semibold text-gray-900">Delivery</th>
+          <th scope="col" class="px-6 py-4 text-right text-sm font-semibold text-gray-900">Total</th>
           <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Status</th>
           <th scope="col" class="px-6 py-4 text-right text-sm font-semibold text-gray-900">Ações</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200 bg-white">
         <tr *ngFor="let pedido of pedidos" class="hover:bg-gray-50 transition-colors">
+          <!-- Pedido -->
           <td class="whitespace-nowrap px-6 py-5 text-sm font-medium text-gray-900">
             #{{ pedido.id || '—' }}
           </td>
-          <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-700">
-            {{ pedido.nome }}
-          </td>
+
+          <!-- Data -->
           <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-600">
             {{ pedido.data }}
           </td>
-          <td class="whitespace-nowrap px-6 py-5 text-sm font-medium text-gray-900">
+
+          <!-- Cliente -->
+          <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-700">
+            {{ pedido.nome }}
+          </td>
+
+          <!-- Delivery (chip) -->
+          <td class="whitespace-nowrap px-6 py-5 text-center text-sm">
+            <span 
+              class="inline-flex items-center px-3 py-1 font-semibold"
+              [ngClass]="{
+                ' text-green-500': pedido.delivery === true,
+                'text-red-500':   pedido.delivery !== true
+              }">
+              {{ pedido.delivery === true ? 'Entregar' : 'Retirar' }}
+            </span>
+          </td>
+
+          <!-- Total (alinhado direita) -->
+          <td class="whitespace-nowrap px-6 py-5 text-sm font-semibold text-gray-900 text-right">
             {{ pedido.total.toFixed(2).replace('.', ',') }}
           </td>
+
+          <!-- Status -->
           <td class="whitespace-nowrap px-6 py-5">
             <span 
               class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium"
               [ngClass]="{
-                'bg-green-100 text-green-800 ring-1 ring-inset ring-green-600/20': pedido.status_pedido.descricao_curta === 'Entregue' || pedido.status_pedido.descricao_curta === 'Retirado',
-                'bg-blue-100 text-blue-800 ring-1 ring-inset ring-blue-600/20':pedido.status_pedido.descricao_curta === 'Em processamento' || pedido.status_pedido.descricao_curta === 'pago',
-                'bg-yellow-100 text-yellow-800 ring-1 ring-inset ring-yellow-600/20': pedido.status_pedido.descricao_curta === 'Pendente' || pedido.status_pedido.descricao_curta === 'aguardando pagamento',
-                'bg-purple-100 text-purple-800 ring-1 ring-inset ring-purple-600/20': pedido.status_pedido.descricao_curta === 'Enviado' || pedido.status_pedido.descricao_curta === 'separacao',
-                'bg-red-100 text-red-800 ring-1 ring-inset ring-red-600/20': pedido.status_pedido.descricao_curta === 'Cancelado' || pedido.status_pedido.descricao_curta === 'rejeitado',
-                'bg-gray-100 text-gray-800 ring-1 ring-inset ring-gray-600/20': true
+                'bg-amber-300 text-amber-800 ': pedido.status_pedido.descricao_curta === 'Novo',
+                'bg-green-100 text-green-800 ': pedido.status_pedido.descricao_curta === 'Entregue' || pedido.status_pedido.descricao_curta === 'Retirado',
+                'bg-blue-100 text-blue-800 ': pedido.status_pedido.descricao_curta === 'Em Preparação' || pedido.status_pedido.descricao_curta === 'pago',
+                'bg-yellow-100 text-yellow-800 ': pedido.status_pedido.descricao_curta === 'Pendente' || pedido.status_pedido.descricao_curta === 'aguardando pagamento',
+                'bg-purple-100 text-purple-800 ': pedido.status_pedido.descricao_curta === 'A Caminho' || pedido.status_pedido.descricao_curta === 'Pronto',
+                'bg-red-100 text-red-800 ': pedido.status_pedido.descricao_curta === 'Cancelado' || pedido.status_pedido.descricao_curta === 'Rejeitado' || pedido.status_pedido.descricao_curta === 'Devolvido',
+               
               }">
               {{ pedido.status_pedido.descricao_curta }}
             </span>
           </td>
-          <td class="whitespace-nowrap px-6 py-5 text-right text-sm font-medium">
+
+          <!-- Ações -->
+          <td class="whitespace-nowrap px-6 py-5 text-right text-sm font-semibold space-x-4">
             <button 
               (click)="visualizarPedido(pedido)"
-              class="mr-3 text-indigo-600 hover:text-indigo-900 font-medium transition">
-              Visualizar
+              title="Visualizar pedido"
+              class="text-indigo-600 hover:text-indigo-900 transition">
+              <span>Detalhes</span>
             </button>
-            <button 
-              (click)="excluirPedido(pedido.id)"
-              class="text-red-600 hover:text-red-900 font-medium transition">
-              Excluir
-            </button>
+            
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- Opcional: rodapé com total de pedidos -->
-  <div *ngIf="pedidos && pedidos.length > 0" class="mt-6 text-right text-sm text-gray-600">
+  <!-- Total de pedidos (alinhado esquerda) -->
+  <div *ngIf="pedidos && pedidos.length > 0" class="mt-6 text-left text-sm text-gray-600">
     Total de pedidos: <span class="font-semibold text-gray-900">{{ pedidos.length }}</span>
   </div>
 </div>
