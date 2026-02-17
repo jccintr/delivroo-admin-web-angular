@@ -3,16 +3,20 @@ import { StoreService } from '../../services/store.service';
 import { PedidosResponse } from '../../models/pedidos/pedidos-response.interface';
 import { firstValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { StatusPedido } from '../../models/pedidos/stsatus-pedido.interface';
+import { ModalStatusComponent } from "../../components/modal-status/modal-status.component";
 
 @Component({
   selector: 'app-pedidos',
-  imports: [CommonModule],
+  imports: [CommonModule, ModalStatusComponent],
   templateUrl: './pedidos.component.html',
   styleUrl: './pedidos.component.css'
 })
 export class PedidosComponent implements OnInit {
 
   pedidos: PedidosResponse[] = [];
+  showStatusModal = false;
+  selectedPedidoForStatus?: PedidosResponse;
 
    constructor(private storeService: StoreService) { }
 
@@ -66,6 +70,33 @@ private getTotalExibido(pedido: PedidosResponse): number {
   getTotalExibidoFormatado(pedido: PedidosResponse): string {
     const valor = this.getTotalExibido(pedido);
     return valor.toFixed(2).replace('.', ',');
+  }
+
+  abrirModalStatus(pedido: PedidosResponse) {
+    this.selectedPedidoForStatus = pedido;
+    this.showStatusModal = true;
+  }
+
+  // Callback quando o status é alterado com sucesso
+  onStatusChanged(event: { pedidoId: number; novoStatus: StatusPedido }) {
+    const pedido = this.pedidos.find(p => p.id === event.pedidoId);
+    if (pedido) {
+      pedido.status_pedido = {
+        ...pedido.status_pedido,
+        id: event.novoStatus.id,
+        descricao_curta: event.novoStatus.descricao_curta,
+        // se precisar de mais campos → copie conforme a interface
+      };
+    }
+    this.showStatusModal = false;
+    this.selectedPedidoForStatus = undefined;
+  }
+
+  
+
+  // Novo método para ação de status (pode usar no lugar ou junto com detalhes)
+  alterarStatus(pedido: PedidosResponse) {
+    this.abrirModalStatus(pedido);
   }
 
 

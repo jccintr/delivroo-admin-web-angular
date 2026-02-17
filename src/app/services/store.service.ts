@@ -9,6 +9,7 @@ import { UpdateWaitTimeRequest } from '../models/dashboard/updateWaitTime-reques
 import { UpdateWaitTimeResponse } from '../models/dashboard/updateWaitTime-response';
 import { toggleStatusResponse } from '../models/dashboard/toggleStatus-response.interface';
 import { PedidosResponse } from '../models/pedidos/pedidos-response.interface';
+import { StatusPedido } from '../models/pedidos/stsatus-pedido.interface';
 
 
 
@@ -58,6 +59,33 @@ export class StoreService {
           'Authorization': 'Bearer ' + this.authService.token()
         },
       }); 
+  }
+
+  getStatus(): Observable<StatusPedido[]> {
+    return this.http.get<StatusPedido[]>(`${this.BASE_API}/status`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authService.token()
+      },
+    }); 
+  }
+
+  addStatusLog(pedido_id: number, status_pedido_id: number): Observable<any> {
+    return this.http.post<any>(
+      `${this.BASE_API}/statuslog`,
+      {
+        pedido_id: pedido_id,
+        status_pedido_id: status_pedido_id
+      },
+      {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.authService.token()
+        }
+      }
+    );
   }
 
   getWaitTime(){

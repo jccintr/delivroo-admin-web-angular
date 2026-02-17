@@ -83,6 +83,12 @@
               class="text-indigo-600 hover:text-indigo-900 transition">
               <span>Detalhes</span>
             </button>
+            <button 
+                (click)="alterarStatus(pedido)"
+                title="Alterar status"
+                class="text-purple-600 hover:text-purple-900 transition">
+                Status
+            </button>
             
           </td>
         </tr>
@@ -94,4 +100,12 @@
   <div *ngIf="pedidos && pedidos.length > 0" class="mt-6 text-left text-sm text-gray-600">
     Total de pedidos: <span class="font-semibold text-gray-900">{{ pedidos.length }}</span>
   </div>
+  <!-- Modal de status -->
+    <app-modal-status
+      *ngIf="showStatusModal && selectedPedidoForStatus"
+      [pedidoId]="selectedPedidoForStatus.id"
+      [currentStatusId]="selectedPedidoForStatus.status_pedido.id"
+      (close)="showStatusModal = false; selectedPedidoForStatus = undefined"
+      (statusChanged)="onStatusChanged($event)"
+    ></app-modal-status>
 </div>
