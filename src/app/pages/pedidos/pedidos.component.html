@@ -60,36 +60,29 @@
 
           <!-- Status -->
           <td class="whitespace-nowrap px-6 py-5">
-            <span 
+            <button  (click)="alterarStatus(pedido)"
               class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium"
               [ngClass]="{
                 'bg-amber-300 text-amber-800 ': pedido.status_pedido.descricao_curta === 'Novo',
                 'bg-green-100 text-green-800 ': pedido.status_pedido.descricao_curta === 'Entregue' || pedido.status_pedido.descricao_curta === 'Retirado',
                 'bg-blue-100 text-blue-800 ': pedido.status_pedido.descricao_curta === 'Em Preparação' || pedido.status_pedido.descricao_curta === 'pago',
                 'bg-yellow-100 text-yellow-800 ': pedido.status_pedido.descricao_curta === 'Pendente' || pedido.status_pedido.descricao_curta === 'aguardando pagamento',
-                'bg-purple-100 text-purple-800 ': pedido.status_pedido.descricao_curta === 'A Caminho' || pedido.status_pedido.descricao_curta === 'Pronto',
+                'bg-purple-100 text-purple-800 ': pedido.status_pedido.descricao_curta === 'A caminho' || pedido.status_pedido.descricao_curta === 'Pronto',
                 'bg-red-100 text-red-800 ': pedido.status_pedido.descricao_curta === 'Cancelado' || pedido.status_pedido.descricao_curta === 'Rejeitado' || pedido.status_pedido.descricao_curta === 'Devolvido',
                
               }">
               {{ pedido.status_pedido.descricao_curta }}
-            </span>
+            </button>
           </td>
 
           <!-- Ações -->
           <td class="whitespace-nowrap px-6 py-5 text-right text-sm font-semibold space-x-4">
             <button 
-              (click)="visualizarPedido(pedido)"
+              (click)="abrirModalDetalhes(pedido)"
               title="Visualizar pedido"
               class="text-indigo-600 hover:text-indigo-900 transition">
               <span>Detalhes</span>
             </button>
-            <button 
-                (click)="alterarStatus(pedido)"
-                title="Alterar status"
-                class="text-purple-600 hover:text-purple-900 transition">
-                Status
-            </button>
-            
           </td>
         </tr>
       </tbody>
@@ -104,8 +97,15 @@
     <app-modal-status
       *ngIf="showStatusModal && selectedPedidoForStatus"
       [pedidoId]="selectedPedidoForStatus.id"
+      [token]="selectedPedidoForStatus.token"
       [currentStatusId]="selectedPedidoForStatus.status_pedido.id"
       (close)="showStatusModal = false; selectedPedidoForStatus = undefined"
       (statusChanged)="onStatusChanged($event)"
     ></app-modal-status>
+    <!-- Modal de detalhes do pedido -->
+    <app-modal-pedido
+      *ngIf="showPedidoModal && selectedPedido"
+      [pedido]="selectedPedido"
+      (close)="fecharModalPedido()"
+    ></app-modal-pedido>
 </div>

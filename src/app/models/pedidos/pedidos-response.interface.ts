@@ -20,6 +20,6 @@ export interface PedidosResponse {
     total: number;
     status_pedido_log: StatusPedidoLog[];
     status_pedido: StatusPedido;
-    items_pedido: ItemPedido[];
+    itens_pedido: ItemPedido[];
 
 }

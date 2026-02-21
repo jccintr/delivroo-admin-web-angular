@@ -1,0 +1,118 @@
+<!--  / overlay -->
+<div class="fixed inset-0  bg-black/40 backdrop-blur-sm transition-opacity duration-300 flex items-center justify-center z-50 p-4"
+     (click)="onClose()">
+
+  <!-- Card do modal -->
+  <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+       (click)="$event.stopPropagation()">
+
+    <!-- header -->
+    <header class="px-6 pt-3 pb-1 border-b border-gray-200 flex items-center justify-between">
+
+      <div>
+        <div class="flex flex-row gap-2 items-center">
+          <h2 class="text-xl font-bold text-gray-900">
+            Pedido #{{ pedido.token || pedido.id || '—' }}
+          </h2>
+          <td class="whitespace-nowrap px-6 ">
+            <span   class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium"
+              [ngClass]="{
+                'bg-amber-300 text-amber-800 ': pedido.status_pedido.descricao_curta === 'Novo',
+                'bg-green-100 text-green-800 ': pedido.status_pedido.descricao_curta === 'Entregue' || pedido.status_pedido.descricao_curta === 'Retirado',
+                'bg-blue-100 text-blue-800 ': pedido.status_pedido.descricao_curta === 'Em Preparação' || pedido.status_pedido.descricao_curta === 'pago',
+                'bg-yellow-100 text-yellow-800 ': pedido.status_pedido.descricao_curta === 'Pendente' || pedido.status_pedido.descricao_curta === 'aguardando pagamento',
+                'bg-purple-100 text-purple-800 ': pedido.status_pedido.descricao_curta === 'A caminho' || pedido.status_pedido.descricao_curta === 'Pronto',
+                'bg-red-100 text-red-800 ': pedido.status_pedido.descricao_curta === 'Cancelado' || pedido.status_pedido.descricao_curta === 'Rejeitado' || pedido.status_pedido.descricao_curta === 'Devolvido',
+               
+              }">
+              {{ pedido.status_pedido.descricao_curta }}
+            </span>
+          </td>
+        </div>
+        <p class="text-sm text-gray-500 mt-1">
+          {{ pedido.data || '—' }}
+        </p>
+         <span class="font-semibold"
+                  [ngClass]="{
+                    ' text-green-500': pedido.delivery === true,
+                    ' text-red-500': pedido.delivery !== true
+                  }">
+              {{ pedido.delivery === true ? 'Entregar' : 'Retirar' }}
+            </span>
+      </div>
+      
+           
+     
+      <button 
+        (click)="onClose()"
+        class="text-gray-500 hover:text-gray-700 focus:outline-none transition"
+        title="Fechar">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </header>
+   <!-- fim do header -->
+    <!-- Conteúdo principal (ainda vazio – será preenchido depois) -->
+    <div class="px-6 py-6 space-y-6">
+
+      <!-- Informações básicas -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <h3 class="text-sm font-medium text-gray-500">Cliente</h3>
+          <p class="mt-1 text-gray-900">{{ pedido.nome || '—' }}</p>
+        </div>
+        <div>
+          <h3 class="text-sm font-medium text-gray-500">Telefone</h3>
+          <p class="mt-1 text-gray-900">{{ pedido.telefone || '—' }}</p>
+        </div>
+         <div>
+          <h3 class="text-sm font-medium text-gray-500">Pagamento</h3>
+          <p class="mt-1 text-gray-900">{{ pedido.forma_pagamento }}</p>
+        </div>
+        @if(pedido.delivery === true){
+          <div>
+            <h3 class="text-sm font-medium text-gray-500">Entrega</h3>
+            <p class="mt-1 text-gray-900">{{ pedido.endereco }}</p>
+          </div>
+        }
+         @if(pedido.observacao){
+          <div>
+            <h3 class="text-sm font-medium text-gray-500">Obs:</h3>
+            <p class="mt-1 text-gray-900">{{ pedido.observacao }}</p>
+          </div>
+        }
+      </div>
+
+      <!-- Espaço reservado para itens, status, pagamento, observações, etc -->
+      <div class="pt-4 border-t border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900">Itens do pedido</h3>
+        <p class="text-sm text-gray-500 mt-2 italic">
+         
+          @for (item of pedido.itens_pedido; track $index) {
+            <app-item-pedido-card [item]="item"></app-item-pedido-card>
+          }
+        </p>
+      </div>
+
+      <!-- Rodapé com total (exemplo) -->
+      @if(pedido.delivery) { 
+        <div class="pt-6 border-t border-gray-200 flex justify-end gap-2 items-center">
+          <span class=" font-medium text-slate-700">Total dos Itens:</span>
+          <span class=" font-semibold text-slate-700">R$ {{ pedido.total.toFixed(2).replace('.', ',') }}</span>
+        </div>
+        <div class="flex justify-end gap-2 items-center">
+          <span class="font-medium text-slate-700">Taxa de Entrega ({{pedido.bairro}}):</span>
+          <span class="font-semibold text-slate-700">R$ {{ pedido.taxa_entrega.replace('.', ',') }}</span>
+        </div>
+      }
+      <div class=" flex justify-end gap-2 items-center">
+        <span class=" text-slate-700 font-medium">Total do Pedido:</span>
+        <span class="font-bold text-slate-700">R$ {{ getTotalFormatado() }}</span>
+      </div>
+    </div>
+
+   
+
+  </div>
+</div>

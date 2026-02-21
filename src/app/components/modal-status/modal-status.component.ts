@@ -12,7 +12,8 @@ export class ModalStatusComponent implements OnInit {
 
   private storeService = inject(StoreService);
 
-  @Input() pedidoId!: number;           // ID do pedido (obrigatório)
+  @Input() pedidoId!: number;  
+  @Input() token!: string;        
   @Input() currentStatusId?: number;    // Status atual (para pré-seleção)
 
   @Output() close = new EventEmitter<void>();
