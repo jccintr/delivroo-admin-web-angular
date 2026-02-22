@@ -6,10 +6,11 @@ import { CommonModule } from '@angular/common';
 import { StatusPedido } from '../../models/pedidos/stsatus-pedido.interface';
 import { ModalStatusComponent } from "../../components/modal-status/modal-status.component";
 import { ModalPedidoComponent } from "../../components/modal-pedido/modal-pedido.component";
+import { ReceiptComponent } from "../../components/receipt/receipt.component";
 
 @Component({
   selector: 'app-pedidos',
-  imports: [CommonModule, ModalStatusComponent, ModalPedidoComponent],
+  imports: [CommonModule, ModalStatusComponent, ModalPedidoComponent, ReceiptComponent],
   templateUrl: './pedidos.component.html',
   styleUrl: './pedidos.component.css'
 })

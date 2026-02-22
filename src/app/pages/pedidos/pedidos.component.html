@@ -81,8 +81,11 @@
               (click)="abrirModalDetalhes(pedido)"
               title="Visualizar pedido"
               class="text-indigo-600 hover:text-indigo-900 transition">
-              <span>Detalhes</span>
+              <span class="material-icons">description</span>
             </button>
+            <app-receipt 
+              [pedido]="pedido"
+              ></app-receipt>
           </td>
         </tr>
       </tbody>
