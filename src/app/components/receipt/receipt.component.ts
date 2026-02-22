@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { PedidosResponse } from '../../models/pedidos/pedidos-response.interface';
+import { AuthService } from '../../services/auth.service';
+import { ItemPedido } from '../../models/pedidos/item-pedido.interface';
 
 @Component({
   selector: 'app-receipt',
@@ -9,6 +11,9 @@ import { PedidosResponse } from '../../models/pedidos/pedidos-response.interface
 })
 export class ReceiptComponent {
   @Input() pedido: PedidosResponse | null | undefined;  // ajuste o tipo se tiver interface (ex: Pedido)
+
+  constructor(private authService: AuthService) {
+   }
 
   imprimir() {
 
@@ -40,6 +45,7 @@ export class ReceiptComponent {
             table { width: 100%; border-collapse: collapse; }
             td, th { padding: 2px 0; }
             .total { font-weight: bold; font-size: 13px; }
+            .title { font-weight: bold;}
             hr { border: none; border-top: 1px dashed #000; margin: 6px 0; }
             @page {
               size: 58mm auto;
@@ -48,23 +54,70 @@ export class ReceiptComponent {
           </style>
         </head>
         <body onload="window.print(); setTimeout(() => window.close(), 800);">
-          <div class="center">SEU NEGÓCIO</div>
-          <div class="center">Minas Gerais - BR</div>
-          <div class="center">CNPJ: xx.xxx.xxx/xxxx-xx</div>
-          <hr>
-          <div>Data: ${new Date().toLocaleString('pt-BR')}</div>
+          <div class="title center">${this.authService.currentUser()?.name}</div>
+          <div class="center">Pedido: ${this.pedido.token}</div>
+          <div class="center">${this.pedido.data}</div>
+          <div class="center">*** ${this.pedido.delivery?'Entregar':'Retirar'} ***</div>
+          <br>
+          <div class="title center">CLIENTE</div>
+          <div class="center">${this.pedido.nome}</div>
+          <div class="center">${this.pedido.telefone}</div>
+          <div class="title center">FORMA DE PAGAMENTO</div>
+          <div class="center">${this.pedido.forma_pagamento}</div>
+          ${this.pedido.delivery ? `
+            <div class="title center">ENDEREÇO DE ENTREGA</div>
+            <div class="center">${this.pedido.endereco}</div>
+            <div class="center">${this.pedido.bairro}</div>
+            ` : ''
+          }
+          ${this.pedido.observacao ? `
+             <div class="title center">OBSERVAÇÃO</div>
+             <div class="center">${this.pedido.observacao}</div>
+          ` : ''}
+          <br>
+          <div class="title center">ITENS DO PEDIDO</div>
           <hr>
           <table>
-            ${this.pedido.itens_pedido.map((item: any) => `
-              <tr>
-                <td>${item.nome || 'Produto'} x${item.quantidade || 1}</td>
-                <td class="right">R$ ${(item.precoUnitario || 0).toFixed(2).replace('.', ',')}</td>
-              </tr>
-            `).join('')}
-          </table>
+  ${this.pedido.itens_pedido.map((item: ItemPedido) => {
+    // Garante que as propriedades existam (segurança)
+    const obrigatorios = item.obrigatorios || [];
+    const adicionais   = item.adicionais   || [];
+
+    return `
+      <tr>
+        <td style="padding-bottom: 2px;">
+          ${item.quantidade} ${item.produto?.nome || 'Produto sem nome'}
+        </td>
+        <td class="right" style="padding-bottom: 2px;">
+          R$ ${(item.total).replace('.', ',')}
+        </td>
+      </tr>
+      ${obrigatorios.length > 0 ? `
+        <tr>
+          <td colspan="2" style="padding: 0 0 2px 12px; font-size: 11px;">
+            ${obrigatorios.map(obs => `<div>${obs}</div>`).join('')}
+          </td>
+        </tr>
+      ` : ''}
+      ${adicionais.length > 0 ? `
+        <tr>
+          <td colspan="2" style="padding: 0 0 4px 12px; font-size: 11px;">
+            ${adicionais.map(adic => `<div>+ ${adic.toString().replace('.', ',')}</div>`).join('')}
+          </td>
+        </tr>
+      ` : ''}
+      <tr><td colspan="2" style="height: 2px;"></td></tr> <!-- pequeno espaçamento entre itens -->
+    `;
+  }).join('')}
+</table>
           <hr>
-          <div class="total center">TOTAL: R$ ${this.pedido.total.toFixed(2).replace('.', ',')}</div>
-          <div class="center">Volte sempre!</div>
+           ${this.pedido.delivery ? `
+            <div class="right">Total dos produtos: R$ ${this.pedido.total.toFixed(2).replace('.', ',')}</div>
+            <div class="right">Taxa de entrega: R$ ${this.pedido.taxa_entrega.replace('.', ',')}</div>
+            ` : ''
+          }
+          <div class="total right">Total a pagar: R$ ${this.getTotalExibidoFormatado(this.pedido)}</div>
+          <div class="center">Obrigado pela preferência!</div>
           <div style="height: 15mm;"></div> <!-- espaço para corte -->
         </body>
       </html>
@@ -78,5 +131,36 @@ export class ReceiptComponent {
       console.error('Falha ao abrir janela de impressão. Verifique bloqueador de pop-ups.');
       alert('Não foi possível abrir a janela de impressão. Desative o bloqueador de pop-ups para este site.');
     }
+  }
+
+  private getTotalExibido(pedido: PedidosResponse): number {
+    let total = pedido.total ?? 0;
+
+    if (pedido.delivery !== true) {
+      return total;
+    }
+
+    // Tenta converter taxa_entrega (string) para número
+    const taxaStr = (pedido.taxa_entrega || '0').trim();
+    let taxa = 0;
+
+    // Substitui vírgula por ponto (muito comum no Brasil)
+    const taxaLimpa = taxaStr.replace(',', '.');
+
+    // Converte para número
+    const parsed = parseFloat(taxaLimpa);
+
+    if (!isNaN(parsed) && isFinite(parsed)) {
+      taxa = parsed;
+    } else {
+      console.warn(`Não foi possível converter taxa_entrega: "${taxaStr}" para número`);
+    }
+
+    return total + taxa;
+  }
+
+  getTotalExibidoFormatado(pedido: PedidosResponse): string {
+    const valor = this.getTotalExibido(pedido);
+    return valor.toFixed(2).replace('.', ',');
   }
 }
