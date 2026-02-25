@@ -1,0 +1,56 @@
+<div class="p-6  lg:p-8 min-h-screen  bg-gray-50">
+    <div class="mb-8">
+      <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 ">Categorias</h1>
+      <p class="text-gray-600 mt-1">Gerencie as categorias da sua loja</p>
+  </div>
+   <!-- Estado vazio -->
+  @if(!categories || categories.length === 0) {  
+        <div  class="text-center py-16 text-gray-500">
+            <p class="text-lg">Nenhuma categoria encontrada no momento.</p>
+            <p class="mt-2">Novas categorias aparecerão aqui automaticamente.</p>
+        </div>
+  }
+  <!-- Tabela de categorias-->
+    @if(categories && categories.length > 0) {
+        <div  class="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+            <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Nome</th>
+                    <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Posição</th>
+                    <th scope="col" class="px-6 py-4 text-right text-sm font-semibold text-gray-900">Ações</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+                @for(category of categories; track category.id){
+                    <tr class="hover:bg-gray-50 transition-colors">
+
+                        <!-- Nome -->
+                        <td class="whitespace-nowrap px-6 py-5 text-sm font-medium text-gray-900">
+                            {{category.nome}}
+                        </td>
+                        <!-- Posição -->
+                        <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-600">
+                            {{category.position}}
+                        </td>
+                        <!-- Ações -->
+                        <td class="whitespace-nowrap px-6 py-5 text-right text-sm font-semibold space-x-4">
+                            <button 
+                                title="Editar Categoria"
+                                class="text-indigo-600 hover:text-indigo-900 transition">
+                                <span class="material-icons">edit</span>
+                            </button>
+                            <button 
+                                title="Excluir Categoria"
+                                class="text-red-600 hover:text-red-900 transition">
+                                <span class="material-icons">delete</span>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            </table>
+        </div>
+   }
+</div>
+

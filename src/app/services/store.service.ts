@@ -10,6 +10,7 @@ import { UpdateWaitTimeResponse } from '../models/dashboard/updateWaitTime-respo
 import { toggleStatusResponse } from '../models/dashboard/toggleStatus-response.interface';
 import { PedidosResponse } from '../models/pedidos/pedidos-response.interface';
 import { StatusPedido } from '../models/pedidos/stsatus-pedido.interface';
+import { CategoryResponse } from '../models/categorias/category-reponse.interface';
 
 
 
@@ -63,6 +64,16 @@ export class StoreService {
 
   getStatus(): Observable<StatusPedido[]> {
     return this.http.get<StatusPedido[]>(`${this.BASE_API}/status`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.authService.token()
+      },
+    }); 
+  }
+
+   getCategories(): Observable<CategoryResponse[]> {
+    return this.http.get<CategoryResponse[]>(`${this.BASE_API}/categorias`, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
