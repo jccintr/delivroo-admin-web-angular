@@ -1,6 +1,138 @@
-<div class="p-6  lg:p-8 min-h-screen  bg-gray-50">
-    <div class="mb-8">
-      <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 ">Cardápio</h1>
-      <p class="text-gray-600 mt-1">Gerencie o cardápio da sua loja</p>
+<div class="p-6 lg:p-8 min-h-screen bg-gray-50">
+  <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Cardápio</h1>
+      <p class="text-gray-600 mt-1">Gerencie as categorias e produtos da sua loja</p>
+    </div>
+
+    <button 
+      (click)="novoProduto()"
+      class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white font-medium rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
+      <span class="material-icons mr-2 text-lg">add</span>
+      Novo Produto
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center py-16 text-gray-500">
+    <p class="text-lg">Carregando cardápio...</p>
+  </div>
+
+  <!-- Sem categorias -->
+  <div *ngIf="!loading && (!categories || categories.length === 0)" class="text-center py-16 text-gray-500">
+    <p class="text-lg">Nenhuma categoria encontrada.</p>
+    <p class="mt-2">Comece adicionando produtos ao cardápio.</p>
+  </div>
+
+  <!-- Acordeão de categorias + produtos -->
+  <div *ngIf="!loading && categories.length > 0" class="space-y-4">
+    <div *ngFor="let categoria of categories" 
+         class="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+
+      <!-- Cabeçalho da categoria (clicável) -->
+      <button 
+        (click)="toggleCategory(categoria.id)"
+        class="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900">
+            {{ categoria.nome }}
+          </h2>
+          <p class="text-sm text-gray-500 mt-0.5">
+            {{ categoria.produtos?.length || 0 }} produto{{ (categoria.produtos?.length !== 1) ? 's' : '' }}
+          </p>
+        </div>
+
+        <span class="material-icons text-gray-500 transition-transform duration-200"
+              [class.rotate-180]="expandedCategoryId === categoria.id">
+          expand_more
+        </span>
+      </button>
+
+      <!-- Conteúdo expandido -->
+      <div *ngIf="expandedCategoryId === categoria.id" 
+           class="border-t border-gray-200">
+        
+        <!-- Tabela de produtos -->
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3.5 text-left text-sm font-semibold text-gray-900">Nome</th>
+                <th scope="col" class="px-6 py-3.5 text-right text-sm font-semibold text-gray-900">Preço</th>
+                <th scope="col" class="px-6 py-3.5 text-center text-sm font-semibold text-gray-900">Ativo</th>
+                <th scope="col" class="px-6 py-3.5 text-right text-sm font-semibold text-gray-900">Ações</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+              <tr *ngFor="let produto of categoria.produtos" 
+                  class="hover:bg-gray-50 transition-colors">
+                
+                <!-- Nome + descrição (se existir) -->
+                <td class="px-6 py-4">
+                  <div class="font-medium text-gray-900">{{ produto.nome }}</div>
+                  <div *ngIf="produto.descricao" class="text-sm text-gray-500 mt-0.5 line-clamp-2">
+                    {{ produto.descricao }}
+                  </div>
+                </td>
+
+                <!-- Preço -->
+                <td class="px-6 py-4 text-right text-sm font-medium text-gray-900 whitespace-nowrap">
+                  {{ getPrecoFormatado(produto.preco) }}
+                </td>
+
+                <!-- Ativo -->
+                <td class="px-6 py-4 text-center">
+                  <span 
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                    [ngClass]="{
+                      'bg-green-100 text-green-800': produto.ativo,
+                      'bg-red-100 text-red-800': !produto.ativo
+                    }">
+                    {{ produto.ativo ? 'Ativo' : 'Inativo' }}
+                  </span>
+                </td>
+
+                <!-- Ações -->
+                <td class="px-6 py-4 text-right text-sm space-x-3">
+                  <button 
+                    (click)="editarProduto(produto.id)"
+                    title="Editar produto"
+                    class="text-indigo-600 hover:text-indigo-900 transition">
+                    <span class="material-icons">edit</span>
+                  </button>
+                  
+                  <button 
+                    (click)="clonarProduto(produto.id)"
+                    title="Clonar produto"
+                    class="text-blue-600 hover:text-blue-900 transition">
+                    <span class="material-icons">content_copy</span>
+                  </button>
+                  
+                  <button 
+                    (click)="excluirProduto(produto.id)"
+                    title="Excluir produto"
+                    class="text-red-600 hover:text-red-900 transition">
+                    <span class="material-icons">delete_outline</span>
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Linha vazia se não houver produtos -->
+              <tr *ngIf="!categoria.produtos || categoria.produtos.length === 0">
+                <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+                  Nenhum produto nesta categoria ainda.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contador total (opcional) -->
+  <div *ngIf="!loading && categories.length > 0" class="mt-6 text-left text-sm text-gray-600">
+    Total de categorias: <span class="font-semibold text-gray-900">{{ categories.length }}</span> •
+    Total de produtos: <span class="font-semibold text-gray-900">{{ totalProdutos() }}</span>
   </div>
 </div>
