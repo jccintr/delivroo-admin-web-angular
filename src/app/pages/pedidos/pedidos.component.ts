@@ -22,6 +22,7 @@ export class PedidosComponent implements OnInit {
   selectedPedidoForStatus?: PedidosResponse;
   showPedidoModal = false;
   selectedPedido?: PedidosResponse;
+  loading = true;
 
    constructor(private storeService: StoreService) { }
 
@@ -33,7 +34,9 @@ export class PedidosComponent implements OnInit {
           console.log('Pedidos:', this.pedidos);
     } catch (error) {
           console.error('Erro ao carregar pedidos:', error);
-    }
+    } finally {
+          this.loading = false;
+        }
 
     }
 

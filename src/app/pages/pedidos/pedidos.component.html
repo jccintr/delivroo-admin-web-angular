@@ -4,8 +4,16 @@
     <p class="text-gray-600 mt-1">Gerencie os pedidos da sua loja</p>
   </div>
 
+   <!-- Loading -->
+   @if(loading) {
+         <div  class="text-center py-16 text-gray-500">
+            <span class="material-icons animate-spin text-xl">autorenew</span>
+            <p class="text-lg">Carregando pedidos...</p>
+        </div>
+   }
+
   <!-- Estado vazio -->
-  <div *ngIf="!pedidos || pedidos.length === 0" class="text-center py-16 text-gray-500">
+  <div *ngIf="(!pedidos || pedidos.length === 0 ) && !loading" class="text-center py-16 text-gray-500">
     <p class="text-lg">Nenhum pedido encontrado no momento.</p>
     <p class="mt-2">Novos pedidos aparecerão aqui automaticamente.</p>
   </div>

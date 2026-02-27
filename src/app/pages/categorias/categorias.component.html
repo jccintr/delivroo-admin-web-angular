@@ -1,13 +1,29 @@
 <div class="p-6  lg:p-8 min-h-screen  bg-gray-50">
-    <div class="mb-8">
-      <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 ">Categorias</h1>
-      <p class="text-gray-600 mt-1">Gerencie as categorias da sua loja</p>
+     <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div class="mb-8">
+           <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 ">Categorias</h1>
+           <p class="text-gray-600 mt-1">Gerencie as categorias da sua loja</p>
+        </div>
+        <button 
+            (click)="novaCategoria()"
+            class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white font-medium rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
+            <span class="material-icons mr-2 text-lg">add</span>
+            Nova Categoria
+        </button>
   </div>
+  <!-- Loading -->
+   @if(loading) {
+         <div  class="text-center py-16 text-gray-500">
+            <span class="material-icons animate-spin text-xl">autorenew</span>
+            <p class="text-lg">Carregando categorias...</p>
+        </div>
+   }
+ 
    <!-- Estado vazio -->
-  @if(!categories || categories.length === 0) {  
+  @if((!categories || categories.length === 0) && !loading) {  
         <div  class="text-center py-16 text-gray-500">
             <p class="text-lg">Nenhuma categoria encontrada no momento.</p>
-            <p class="mt-2">Novas categorias aparecerão aqui automaticamente.</p>
+            <p class="mt-2">Comece adicionando categorias para organizar seus produtos.</p>
         </div>
   }
   <!-- Tabela de categorias-->
@@ -36,14 +52,20 @@
                         <!-- Ações -->
                         <td class="whitespace-nowrap px-6 py-5 text-right text-sm font-semibold space-x-4">
                             <button 
+                                (click)="editarCategoria(category)"
                                 title="Editar Categoria"
                                 class="text-indigo-600 hover:text-indigo-900 transition">
                                 <span class="material-icons">edit</span>
                             </button>
-                            <button 
-                                title="Excluir Categoria"
-                                class="text-red-600 hover:text-red-900 transition">
-                                <span class="material-icons">delete</span>
+                           <button 
+                                (click)="excluirCategoria(category)"
+                                [disabled]="category.produtos.length > 0"
+                                class="text-red-600 hover:text-red-900 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                                [title]="category.produtos.length > 0 
+                                    ? 'Não é possível excluir: esta categoria possui ' + category.produtos.length + ' produto(s)' 
+                                    : 'Excluir Categoria'"
+                                >
+                                <span class="material-icons">delete_outline</span>
                             </button>
                         </td>
                     </tr>
@@ -53,4 +75,21 @@
         </div>
    }
 </div>
+@if (showModal) {
+  <app-modal-category
+    [isEditMode]="modalMode === 'edit'"
+    [categoryToEdit]="selectedCategory"
+    (close)="showModal = false"
+    (saved)="onCategorySaved()"
+  ></app-modal-category>
+}
+@if (showDeleteModal) {
+  <app-modal-delete
+    [title]="'Excluir Categoria'"
+    [message]="'Tem certeza que deseja excluir esta categoria?'"
+    [itemName]="categoryToDelete?.nome || ''"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()"
+  ></app-modal-delete>
+}
 

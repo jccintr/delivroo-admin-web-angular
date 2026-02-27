@@ -15,6 +15,7 @@
 
   <!-- Loading -->
   <div *ngIf="loading" class="text-center py-16 text-gray-500">
+    <span class="material-icons animate-spin text-xl">autorenew</span>
     <p class="text-lg">Carregando cardápio...</p>
   </div>
 
@@ -38,7 +39,7 @@
             {{ categoria.nome }}
           </h2>
           <p class="text-sm text-gray-500 mt-0.5">
-            {{ categoria.produtos?.length || 0 }} produto{{ (categoria.produtos?.length !== 1) ? 's' : '' }}
+            {{ categoria.produtos.length || 0 }} produto{{ (categoria.produtos.length !== 1) ? 's' : '' }}
           </p>
         </div>
 

@@ -3,6 +3,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { StoreService } from '../../services/store.service';
 import { SidebarComponent } from "../../components/sidebar/sidebar.component";
+import { STORAGE_BASE_URL } from '../../constants/api.constants';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +24,7 @@ export class HomeComponent implements OnInit {
      this.router.navigate(['/login']);
    }
    this.storeName = this.authService.currentUser()?.name ?? null;
-   this.logotipo = this.storeService.BASE_STORAGE + '/' + this.authService.currentUser()?.logotipo;
+   this.logotipo = STORAGE_BASE_URL + '/' + this.authService.currentUser()?.logotipo;
   }
 
 }

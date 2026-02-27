@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
   pedidosRetirados = signal<number>(0);
   faturamentoTotal = signal<number>(0);
   showWaitTimeModal = signal(false);
+   loading = true;
 
   constructor(private storeService: StoreService) { }
   
@@ -36,7 +37,9 @@ export class DashboardComponent implements OnInit {
          console.log('Dashboard data:', this.dashboardData);
        } catch (error) {
          console.error('Erro ao carregar dados do dashboard:', error);
-       }
+       } finally {
+          this.loading = false;
+        }
      
   }
 

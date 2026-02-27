@@ -10,8 +10,7 @@ import { UpdateWaitTimeResponse } from '../models/dashboard/updateWaitTime-respo
 import { toggleStatusResponse } from '../models/dashboard/toggleStatus-response.interface';
 import { PedidosResponse } from '../models/pedidos/pedidos-response.interface';
 import { StatusPedido } from '../models/pedidos/stsatus-pedido.interface';
-import { CategoryResponse } from '../models/categorias/category-reponse.interface';
-
+import { API_BASE_URL, STORAGE_BASE_URL} from '../constants/api.constants';
 
 
 
@@ -21,11 +20,9 @@ import { CategoryResponse } from '../models/categorias/category-reponse.interfac
 })
 export class StoreService {
 
-  private readonly BASE_API: string = 'https://api.delivroo.app.br/api';
-  public readonly BASE_STORAGE: string = 'https://api.delivroo.app.br/storage';
-  //private readonly BASE_API: string = 'http://127.0.0.1:8000/api';
-  //public readonly BASE_STORAGE: string = 'http://127.0.0.1:8000/storage';
- 
+  private readonly BASE_API: string = API_BASE_URL;
+  private readonly BASE_STORAGE: string = STORAGE_BASE_URL;
+  
  
   constructor(private http: HttpClient,private authService: AuthService) {}
 
@@ -72,15 +69,7 @@ export class StoreService {
     }); 
   }
 
-   getCategories(): Observable<CategoryResponse[]> {
-    return this.http.get<CategoryResponse[]>(`${this.BASE_API}/categorias`, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + this.authService.token()
-      },
-    }); 
-  }
+  
 
   addStatusLog(pedido_id: number, status_pedido_id: number): Observable<any> {
     return this.http.post<any>(

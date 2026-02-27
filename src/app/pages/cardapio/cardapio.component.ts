@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CategoryResponse } from '../../models/categorias/category-reponse.interface';
-import { StoreService } from '../../services/store.service';
 import { CommonModule } from '@angular/common';
+import { CategoryService } from '../../services/category.service';
 
 @Component({
   selector: 'app-cardapio',
@@ -16,11 +16,11 @@ export class CardapioComponent implements OnInit {
   expandedCategoryId: number | null = null;
   loading = true;
 
-   constructor(private storeService: StoreService) { }
+   constructor(private categoryService: CategoryService) { }
   
      async ngOnInit(): Promise<void> {
         try {
-          this.categories = await firstValueFrom(this.storeService.getCategories());
+          this.categories = await firstValueFrom(this.categoryService.getCategories());
           console.log('Categorias carregadas:', this.categories);
         } catch (error) {
           console.error('Erro ao carregar categorias:', error);
