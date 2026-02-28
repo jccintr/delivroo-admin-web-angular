@@ -1,0 +1,106 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <!-- Overlay -->
+  <div 
+    class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300"
+    (click)="onCancel()"
+  ></div>
+
+  <!-- Modal -->
+  <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden z-10 relative">
+    
+    <!-- Cabeçalho -->
+    <div class="px-6 py-5 border-b border-gray-200">
+      <h2 class="text-xl font-semibold text-gray-800">
+        {{ isEditMode ? 'Editar Taxa de Entrega' : 'Nova Taxa de Entrega' }}
+      </h2>
+      @if (!isEditMode) {
+        <p class="text-sm text-gray-500 mt-1">
+          Adicione uma nova taxa de entrega para um bairro específico
+        </p>
+      }
+    </div>
+
+    <!-- Corpo -->
+    <div class="p-6 space-y-6">
+      
+      <!-- Bairro -->
+      <div>
+        <label for="bairro" class="block text-sm font-medium text-gray-700 mb-2">
+          Nome do bairro <span class="text-red-500">*</span>
+        </label>
+        <input 
+          id="bairro"
+          type="text"
+          [(ngModel)]="bairro"
+          placeholder="Ex: Centro, São Pedro, Lourdes, Buritis"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+          required
+          maxlength="100"
+        />
+      </div>
+
+      <!-- Valor -->
+      <div>
+        <label for="valor" class="block text-sm font-medium text-gray-700 mb-2">
+          Valor da taxa (R$) <span class="text-red-500">*</span>
+        </label>
+        <input 
+          id="valor"
+          type="number"
+          step="0.01"
+          min="0"
+          [(ngModel)]="valor"
+          placeholder="Ex: 12.50"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+          required
+        />
+      </div>
+
+      <!-- Ativo -->
+      <div class="flex items-center">
+        <input 
+          id="ativo"
+          type="checkbox"
+          [(ngModel)]="ativo"
+          class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+        />
+        <label for="ativo" class="ml-3 text-sm font-medium text-gray-700">
+          Taxa ativa (visível e aplicável para os clientes)
+        </label>
+      </div>
+
+      <!-- Mensagem de erro -->
+      @if (errorMessage) {
+        <div class="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
+          {{ errorMessage }}
+        </div>
+      }
+    </div>
+
+    <!-- Rodapé -->
+    <div class="px-6 py-4 bg-gray-50 flex justify-end gap-3 border-t border-gray-200">
+      <button 
+        (click)="onCancel()"
+        type="button"
+        class="px-5 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 font-medium transition-colors"
+        [disabled]="isSaving()"
+      >
+        Cancelar
+      </button>
+      
+      <button 
+        (click)="onSave()"
+        [disabled]="!bairro.trim() || valor === null || isSaving()"
+        type="button"
+        class="px-5 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+      >
+        @if (isSaving()) {
+          <span class="material-icons animate-spin text-xl">autorenew</span>
+          Salvando...
+        } @else { 
+          {{ isEditMode ? 'Atualizar Taxa' : 'Salvar Taxa' }}
+        }
+      </button>
+    </div>
+  </div>
+</div>
