@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
-import { PedidosResponse } from '../../models/pedidos/pedidos-response.interface';
+import { PedidosResponse } from '../../../models/pedidos/pedidos-response.interface';
 import { CommonModule } from '@angular/common';
-import { ItemPedidoCardComponent } from "../item-pedido-card/item-pedido-card.component";
+import { ItemPedidoCardComponent } from "../../item-pedido-card/item-pedido-card.component";
 
 @Component({
   selector: 'app-modal-pedido',

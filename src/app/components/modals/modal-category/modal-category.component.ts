@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
-import { CategoryRequest } from '../../models/categorias/category-request.interface';
-import { CategoryService } from '../../services/category.service';
+import { CategoryRequest } from '../../../models/categorias/category-request.interface';
+import { CategoryService } from '../../../services/category.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({

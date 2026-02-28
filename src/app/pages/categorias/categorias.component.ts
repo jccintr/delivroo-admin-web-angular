@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CategoryResponse } from '../../models/categorias/category-reponse.interface';
 import { firstValueFrom } from 'rxjs';
 import { CategoryService } from '../../services/category.service';
-import { ModalCategoryComponent } from "../../components/modal-category/modal-category.component";
-import { ModalDeleteComponent } from "../../components/modal-delete/modal-delete.component";
+import { ModalCategoryComponent } from "../../components/modals/modal-category/modal-category.component";
+import { ModalDeleteComponent } from "../../components/modals/modal-delete/modal-delete.component";
 
 @Component({
   selector: 'app-categorias',
@@ -38,10 +38,10 @@ export class CategoriasComponent implements OnInit {
   }
 
   showCategoryModal(isEdit = false, category?: CategoryResponse) {
-  this.modalMode = isEdit ? 'edit' : 'create';
-  this.selectedCategory = category;
-  this.showModal = true;
-}
+    this.modalMode = isEdit ? 'edit' : 'create';
+    this.selectedCategory = category;
+    this.showModal = true;
+  }
 
   editarCategoria(categoria: CategoryResponse) {
     this.showCategoryModal(true, categoria);
@@ -51,9 +51,9 @@ export class CategoriasComponent implements OnInit {
    this.showCategoryModal(false);
   }
 
-  onCategorySaved() {          // ← novo nome
+  onCategorySaved() {         
   this.showModal = false;
-  this.loadCategories();     // recarrega a lista
+  this.loadCategories();    
 }
 
   fecharModal(): void {
@@ -76,10 +76,9 @@ export class CategoriasComponent implements OnInit {
       this.categoryService.deleteCategory(this.categoryToDelete.id)
     );
     
-    this.onCategorySaved(); // recarrega a lista (reutilizando o método existente)
+    this.onCategorySaved(); 
     this.showDeleteModal = false;
-    // Opcional: mostrar toast de sucesso
-    // alert('Categoria excluída com sucesso!');
+  
   } catch (error: any) {
     console.error('Erro ao excluir categoria:', error);
     alert('Não foi possível excluir a categoria. Tente novamente.');

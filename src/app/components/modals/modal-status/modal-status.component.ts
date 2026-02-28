@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
-import { StatusPedido, STATUS_PEDIDO } from '../../constants/status-pedido.constant';
-import { StoreService } from '../../services/store.service';
+import { StatusPedido, STATUS_PEDIDO } from '../../../constants/status-pedido.constant';
+import { StoreService } from '../../../services/store.service';
 
 @Component({
   selector: 'app-modal-status',

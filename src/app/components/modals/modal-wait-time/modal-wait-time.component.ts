@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
-import { StoreService } from '../../services/store.service';
+import { StoreService } from '../../../services/store.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({

@@ -11,7 +11,7 @@ import { CategoryRequest } from '../models/categorias/category-request.interface
 })
 export class CategoryService {
 
-   private readonly BASE_API: string = API_BASE_URL;
+  private readonly BASE_API: string = API_BASE_URL;
 
   constructor(private http: HttpClient,private authService: AuthService) {}
 

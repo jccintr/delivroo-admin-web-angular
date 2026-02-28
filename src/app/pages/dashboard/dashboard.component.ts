@@ -2,7 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { StoreService } from '../../services/store.service';
 import { firstValueFrom } from 'rxjs';
 import { DashboardResponse } from '../../models/dashboard/dashboard-response.interface';
-import { ModalWaitTimeComponent } from "../../components/modal-wait-time/modal-wait-time.component";
+import { ModalWaitTimeComponent } from "../../components/modals/modal-wait-time/modal-wait-time.component";
 
 @Component({
   selector: 'app-dashboard',

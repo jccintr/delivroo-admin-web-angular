@@ -1,1 +1,87 @@
-<p>pagamentos works!</p>
+<div class="p-6  lg:p-8 min-h-screen  bg-gray-50">
+     <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div class="mb-8">
+           <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 ">Formas de Pagamento</h1>
+           <p class="text-gray-600 mt-1">Gerencie as formas de pagamento da sua loja</p>
+        </div>
+        <button 
+            (click)="novoPagamento()"
+            class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white font-medium rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
+            <span class="material-icons mr-2 text-lg">add</span>
+            Nova Forma de Pagamento
+        </button>
+  </div>
+  <!-- Loading -->
+   @if(loading) {
+         <div  class="text-center py-16 text-gray-500">
+            <span class="material-icons animate-spin text-xl">autorenew</span>
+            <p class="text-lg">Carregando formas de pagamentos...</p>
+        </div>
+   }
+ 
+   <!-- Estado vazio -->
+  @if((!payments || payments.length === 0) && !loading) {  
+        <div  class="text-center py-16 text-gray-500">
+            <p class="text-lg">Nenhum pagamento encontrado no momento.</p>
+            <p class="mt-2">Comece adicionando pagamentos para organizar seus produtos.</p>
+        </div>
+  }
+  <!-- Tabela de categorias-->
+    @if(payments && payments.length > 0) {
+        <div  class="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+            <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Nome</th>
+                    <th scope="col" class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Status</th>
+                    <th scope="col" class="px-6 py-4 text-right text-sm font-semibold text-gray-900">Ações</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+                @for(payment of payments; track payment.id){
+                    <tr class="hover:bg-gray-50 transition-colors">
+
+                        <!-- Nome -->
+                        <td class="whitespace-nowrap px-6 py-5 text-sm font-medium text-gray-900">
+                            {{payment.nome}}
+                        </td>
+                        <!-- Ativo -->
+                        <td class="whitespace-nowrap px-6 py-5 text-sm text-gray-600">
+                            <span 
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                [ngClass]="{
+                                'bg-green-100 text-green-800': payment.ativo,
+                                'bg-red-100 text-red-800': !payment.ativo
+                                }">
+                                {{ payment.ativo ? 'Ativo' : 'Inativo' }}
+                            </span>
+                        </td>
+                        <!-- Ações -->
+                        <td class="whitespace-nowrap px-6 py-5 text-right text-sm font-semibold space-x-4">
+                            <button 
+                                (click)="editarPagamento(payment)"
+                                title="Editar Pagamento"
+                                class="text-indigo-600 hover:text-indigo-900 transition">
+                                <span class="material-icons">edit</span>
+                            </button>
+                         
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            </table>
+        </div>
+   }
+</div>
+@if (showModal) {
+  <app-modal-payment
+    [isEditMode]="modalMode === 'edit'"
+    [paymentToEdit]="selectedPayment"
+    (close)="fecharModal()"
+    (saved)="onPaymentSaved()"
+  ></app-modal-payment>
+}
+
+
+
+

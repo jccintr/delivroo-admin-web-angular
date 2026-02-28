@@ -4,9 +4,9 @@ import { PedidosResponse } from '../../models/pedidos/pedidos-response.interface
 import { firstValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { StatusPedido } from '../../models/pedidos/stsatus-pedido.interface';
-import { ModalStatusComponent } from "../../components/modal-status/modal-status.component";
-import { ModalPedidoComponent } from "../../components/modal-pedido/modal-pedido.component";
+import { ModalPedidoComponent } from "../../components/modals/modal-pedido/modal-pedido.component";
 import { ReceiptComponent } from "../../components/receipt/receipt.component";
+import { ModalStatusComponent } from '../../components/modals/modal-status/modal-status.component';
 
 @Component({
   selector: 'app-pedidos',
