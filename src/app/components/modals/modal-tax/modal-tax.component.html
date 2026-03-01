@@ -39,22 +39,16 @@
         />
       </div>
 
-      <!-- Valor -->
-      <div>
-        <label for="valor" class="block text-sm font-medium text-gray-700 mb-2">
-          Valor da taxa (R$) <span class="text-red-500">*</span>
-        </label>
-        <input 
-          id="valor"
-          type="number"
-          step="0.01"
-          min="0"
-          [(ngModel)]="valor"
-          placeholder="Ex: 12.50"
-          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
-          required
+      <!-- currency input-->
+       <div>
+       <app-currency-input
+          label="Valor da taxa (R$)"
+          placeholder="Ex: 12,50 ou 120,00"
+          [required]="true"
+          [(value)]="valor"        
+          [errorMessage]="valor === null || valor <= 0 ? 'Valor obrigatório e maior que zero' : ''"
         />
-      </div>
+       </div>
 
       <!-- Ativo -->
       <div class="flex items-center">
@@ -90,7 +84,7 @@
       
       <button 
         (click)="onSave()"
-        [disabled]="!bairro.trim() || valor === null || isSaving()"
+        [disabled]="!bairro.trim() || valor === null || valor <= 0 || isSaving()"
         type="button"
         class="px-5 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
       >
