@@ -9,6 +9,7 @@ import { PagamentosComponent } from './pages/pagamentos/pagamentos.component';
 import { TaxasComponent } from './pages/taxas/taxas.component';
 import { ObrigatoriosComponent } from './pages/obrigatorios/obrigatorios.component';
 import { AdicionaisComponent } from './pages/adicionais/adicionais.component';
+import { SalesReportComponent } from './pages/sales-report/sales-report.component';
 
 export const routes: Routes = [
    
@@ -47,6 +48,10 @@ export const routes: Routes = [
       {
         path: 'adicionais',
         component: AdicionaisComponent
+      },
+       {
+        path: 'report',
+        component: SalesReportComponent
       }
     ]
    }, 

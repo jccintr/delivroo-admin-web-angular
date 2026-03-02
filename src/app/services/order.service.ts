@@ -15,7 +15,7 @@ export class OrderService {
    constructor(private http: HttpClient,private authService: AuthService) {}
 
    getMonthReport(month:number,year:number) : Observable<PedidosResponse[]> {
-       return this.http.get<PedidosResponse[]>(`${this.BASE_API}/pedidos/${month}/${year}`, {
+       return this.http.get<PedidosResponse[]>(`${this.BASE_API}/pedidos/${year}/${month}`, {
          headers: {
            Accept: 'application/json',
            'Content-Type': 'application/json',
