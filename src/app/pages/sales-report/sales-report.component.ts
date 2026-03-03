@@ -123,7 +123,11 @@ export class SalesReportComponent implements OnInit, AfterViewInit {
   atualizarNomeMes(): void {
     const mesSelecionado = this.months.find(m => m.value === this.selectedMonth);
     this.nomeMes = mesSelecionado ? mesSelecionado.label.charAt(0).toUpperCase() + mesSelecionado.label.slice(1) : '';
+    console.log('Mês selecionado:', this.selectedMonth, '→ nomeMes:', this.nomeMes);
+    this.cdr.detectChanges();
   }
+
+ 
 
   private processarDados(data: PedidosResponse[]): void {
     this.totalPedidos = data.length;
@@ -226,15 +230,43 @@ export class SalesReportComponent implements OnInit, AfterViewInit {
     );
 
     this.charts.push(
-      new Chart('produtosChart', {
-        type: 'pie',
-        data: {
-          labels: this.produtosData.map(p => p.nome),
-          datasets: [{ data: this.produtosData.map(p => p.quantidade), backgroundColor: ['#4299e1', '#68d391', '#ecc94b', '#ed64a6', '#a0aec4', '#f6ad55'] }]
+    new Chart('produtosChart', {
+      type: 'bar',
+      data: {
+        labels: this.produtosData.map(p => p.nome),
+        datasets: [{
+          label: 'Quantidade',
+          data: this.produtosData.map(p => p.quantidade),
+          backgroundColor: '#4299e1',
+          borderColor: '#2b6cb0',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        indexAxis: 'y',           
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
         },
-        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-      })
-    );
+        scales: {
+          x: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Quantidade Vendida'
+            }
+          },
+          y: {
+            ticks: {
+              autoSkip: false,
+              font: { size: 13 }
+            }
+          }
+        }
+      }
+    })
+   );
 
     this.charts.push(
       new Chart('pedidosDiaChart', {
@@ -263,7 +295,7 @@ export class SalesReportComponent implements OnInit, AfterViewInit {
         type: 'bar',
         data: {
           labels: this.bairrosData.map(b => b.bairro),
-          datasets: [{ label: 'Pedidos', data: this.bairrosData.map(b => b.pedidos), backgroundColor: '#68d391' }]
+          datasets: [{ label: 'Pedidos', data: this.bairrosData.map(b => b.pedidos), backgroundColor: '#4299e1' }]
         },
         options: { responsive: true, scales: { y: { beginAtZero: true } } }
       })
