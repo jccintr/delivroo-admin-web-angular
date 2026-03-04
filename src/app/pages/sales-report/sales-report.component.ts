@@ -17,6 +17,7 @@ import {
 } from 'chart.js';
 import { OrderService } from '../../services/order.service';
 import { PedidosResponse } from '../../models/pedidos/pedidos-response.interface';
+import { LastMonth } from '../../models/pedidos/last-month.interface';
 
 @Component({
   selector: 'app-sales-report',
@@ -30,17 +31,20 @@ export class SalesReportComponent implements OnInit, AfterViewInit {
   // Seleção de período
   selectedMonth: number = new Date().getMonth() + 1;
   selectedYear: number = new Date().getFullYear();
-  nomeMes: string = '';
+  lastMonths: LastMonth[] = this.getLastSixMonths();
+  periodoSelecionado: LastMonth | null = this.lastMonths[0];
+  nomeMes: string = this.periodoSelecionado?.label.split('/')[0] || '';
 
+  /*
   months: { value: number; label: string }[] = Array.from({ length: 12 }, (_, i) => ({
     value: i + 1,
     label: new Date(0, i).toLocaleString('pt-BR', { month: 'long' })
   }));
-
+  */
   
-
+/*
   years: number[] = Array.from({ length: 11 }, (_, i) => new Date().getFullYear() - 5 + i);
-
+*/
   // Dados processados
   totalPedidos: number = 0;
   faturamentoTotal: number = 0;
@@ -83,8 +87,8 @@ export class SalesReportComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.atualizarNomeMes();
-    this.gerarRelatorio();
+    const today = new Date();
+    this.gerarRelatorio(today.getMonth() , today.getFullYear());
   }
 
   ngAfterViewInit(): void {
@@ -94,8 +98,9 @@ export class SalesReportComponent implements OnInit, AfterViewInit {
     }
   }
 
-  gerarRelatorio(): void {
-    this.atualizarNomeMes();
+  gerarRelatorio(mes:number,ano:number): void {
+    this.selectedMonth = mes;
+    this.selectedYear = ano;
     this.isLoading = true;
     this.dadosCarregados = false;
 
@@ -119,15 +124,44 @@ export class SalesReportComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // Atualiza o nome do mês sempre que selectedMonth mudar
-  atualizarNomeMes(): void {
-    const mesSelecionado = this.months.find(m => m.value === this.selectedMonth);
-    this.nomeMes = mesSelecionado ? mesSelecionado.label.charAt(0).toUpperCase() + mesSelecionado.label.slice(1) : '';
-    console.log('Mês selecionado:', this.selectedMonth, '→ nomeMes:', this.nomeMes);
-    this.cdr.detectChanges();
+  atualizarPeriodo(monthYear: LastMonth): void {
+    this.selectedMonth = monthYear.month;
+    this.selectedYear = monthYear.year; 
+    this.nomeMes = monthYear.label.split('/')[0];
+    console.log('Período atualizado para:', monthYear);
+    this.gerarRelatorio( monthYear.month, monthYear.year);
   }
 
- 
+  
+ private getLastSixMonths(): LastMonth[] {
+    const meses: readonly string[] = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ] as const;
+
+    const hoje = new Date();
+    let ano = hoje.getFullYear();
+    let mes = hoje.getMonth() - 1;
+
+    if (mes < 0) {
+        mes = 11;
+        ano--;
+    }
+
+    const resultado: LastMonth[] = [];
+
+    for (let i = 0; i < 6; i++) {
+        resultado.push({ month: mes + 1, year: ano, label: `${meses[mes]}/${ano}` });
+
+        mes--;
+        if (mes < 0) {
+            mes = 11;
+            ano--;
+        }
+    }
+
+    return resultado;
+}
 
   private processarDados(data: PedidosResponse[]): void {
     this.totalPedidos = data.length;
