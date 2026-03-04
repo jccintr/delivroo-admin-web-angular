@@ -69,21 +69,21 @@ export class CategoriasComponent implements OnInit {
   }
 
   async confirmDelete() {
-  if (!this.categoryToDelete) return;
+      if (!this.categoryToDelete) return;
 
-  try {
-    await firstValueFrom(
-      this.categoryService.deleteCategory(this.categoryToDelete.id)
-    );
-    
-    this.onCategorySaved(); 
-    this.showDeleteModal = false;
-  
-  } catch (error: any) {
-    console.error('Erro ao excluir categoria:', error);
-    alert('Não foi possível excluir a categoria. Tente novamente.');
-  }
-}
+      try {
+        await firstValueFrom(
+          this.categoryService.deleteCategory(this.categoryToDelete.id)
+        );
+        
+        this.onCategorySaved(); 
+        this.showDeleteModal = false;
+      
+      } catch (error: any) {
+        console.error('Erro ao excluir categoria:', error);
+        alert('Não foi possível excluir a categoria. Tente novamente.');
+      }
+ }
 
 cancelDelete() {
   this.showDeleteModal = false;

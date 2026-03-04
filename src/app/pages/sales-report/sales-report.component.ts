@@ -18,6 +18,7 @@ import {
 import { OrderService } from '../../services/order.service';
 import { PedidosResponse } from '../../models/pedidos/pedidos-response.interface';
 import { LastMonth } from '../../models/pedidos/last-month.interface';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-sales-report',
@@ -35,16 +36,7 @@ export class SalesReportComponent implements OnInit, AfterViewInit {
   periodoSelecionado: LastMonth | null = this.lastMonths[0];
   nomeMes: string = this.periodoSelecionado?.label.split('/')[0] || '';
 
-  /*
-  months: { value: number; label: string }[] = Array.from({ length: 12 }, (_, i) => ({
-    value: i + 1,
-    label: new Date(0, i).toLocaleString('pt-BR', { month: 'long' })
-  }));
-  */
-  
-/*
-  years: number[] = Array.from({ length: 11 }, (_, i) => new Date().getFullYear() - 5 + i);
-*/
+  //data: PedidosResponse[] = [];
   // Dados processados
   totalPedidos: number = 0;
   faturamentoTotal: number = 0;
@@ -103,27 +95,26 @@ export class SalesReportComponent implements OnInit, AfterViewInit {
     this.selectedYear = ano;
     this.isLoading = true;
     this.dadosCarregados = false;
-
     this.destroyCharts();
-
-    this.orderService.getMonthReport(this.selectedMonth, this.selectedYear).subscribe({
-      next: (data: PedidosResponse[]) => {
-        console.log('Dados recebidos:', data);
-        this.processarDados(data);
-        this.dadosCarregados = true;
-        this.isLoading = false;
-        this.cdr.markForCheck();
-        this.cdr.detectChanges();
-        setTimeout(() => this.renderGraficos(), 0);
-      },
-      error: (err) => {
-        console.error('Erro ao carregar relatório:', err);
-        this.isLoading = false;
-        this.cdr.detectChanges();
-      }
-    });
+    this.loadData();
   }
 
+  async loadData() {
+     try {
+          const reportData = await firstValueFrom( this.orderService.getMonthReport(this.selectedMonth, this.selectedYear));
+          this.processarDados(reportData);
+          this.dadosCarregados = true;
+          this.isLoading = false;
+          this.cdr.markForCheck();
+          this.cdr.detectChanges();
+          setTimeout(() => this.renderGraficos(), 0);
+        } catch (error) {
+          console.error('Erro ao carregar dados:', error);
+        } finally {
+            this.isLoading = false;
+        }
+  }
+    
   atualizarPeriodo(monthYear: LastMonth): void {
     this.selectedMonth = monthYear.month;
     this.selectedYear = monthYear.year; 
