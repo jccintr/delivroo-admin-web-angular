@@ -3,6 +3,7 @@ import { firstValueFrom } from 'rxjs';
 import { CategoryResponse } from '../../models/categorias/category-reponse.interface';
 import { CommonModule } from '@angular/common';
 import { CategoryService } from '../../services/category.service';
+import { STORAGE_BASE_URL } from '../../constants/api.constants';
 
 @Component({
   selector: 'app-cardapio',
@@ -11,6 +12,8 @@ import { CategoryService } from '../../services/category.service';
   styleUrl: './cardapio.component.css'
 })
 export class CardapioComponent implements OnInit {
+
+  storageBaseUrl = STORAGE_BASE_URL;
 
   categories: CategoryResponse[] = [];
   expandedCategoryId: number | null = null;
@@ -66,5 +69,9 @@ export class CardapioComponent implements OnInit {
   totalProdutos(): number {
   return this.categories.reduce((sum, cat) => sum + (cat.produtos?.length || 0), 0);
 }
+
+ getStorageUrl(){
+  return STORAGE_BASE_URL + '/';
+ }
 
 }

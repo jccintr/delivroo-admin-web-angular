@@ -65,14 +65,20 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
-              <tr *ngFor="let produto of categoria.produtos" 
-                  class="hover:bg-gray-50 transition-colors">
+              <tr *ngFor="let produto of categoria.produtos" class="hover:bg-gray-50 transition-colors">
                 
                 <!-- Nome + descrição (se existir) -->
                 <td class="px-6 py-4">
-                  <div class="font-medium text-gray-900">{{ produto.nome }}</div>
-                  <div *ngIf="produto.descricao" class="text-sm text-gray-500 mt-0.5 line-clamp-2">
-                    {{ produto.descricao }}
+                  <div class="flex flex-row">
+                      @if(produto.imagem!==null){
+                          <img [src]="getStorageUrl() + produto.imagem" alt="{{ produto.nome }}" class="w-12 h-12 rounded object-cover mr-4">
+                      }
+                      <div> 
+                        <div class="font-medium text-gray-900">{{ produto.nome }}</div>
+                        <div *ngIf="produto.descricao" class="text-sm text-gray-500 mt-0.5 line-clamp-2">
+                            {{ produto.descricao }}
+                        </div>
+                      </div>
                   </div>
                 </td>
 
