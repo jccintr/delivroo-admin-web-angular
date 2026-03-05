@@ -9,7 +9,9 @@ import { ExtrasRequest } from '../models/adicionais/extras-request.interface';
 @Injectable({
   providedIn: 'root'
 })
-export class ExtrasService {private readonly BASE_API: string = API_BASE_URL;
+export class ExtrasService {
+  
+  private readonly BASE_API: string = API_BASE_URL;
 
   constructor(private http: HttpClient,private authService: AuthService) {}
 
