@@ -4,10 +4,11 @@ import { ExtrasResponse } from '../../models/adicionais/extras-response.interfac
 import { firstValueFrom } from 'rxjs';
 import { ModalDeleteComponent } from "../../components/modals/modal-delete/modal-delete.component";
 import { ModalExtraComponent } from "../../components/modals/modal-extra/modal-extra.component";
+import { ModalErrorComponent } from "../../components/modals/modal-error/modal-error.component";
 
 @Component({
   selector: 'app-adicionais',
-  imports: [ModalDeleteComponent, ModalExtraComponent],
+  imports: [ModalDeleteComponent, ModalExtraComponent, ModalErrorComponent],
   templateUrl: './adicionais.component.html',
   styleUrl: './adicionais.component.css'
 })
@@ -20,6 +21,11 @@ export class AdicionaisComponent implements OnInit {
   showDeleteModal = false;
   extraToDelete?: ExtrasResponse;
   loading = true;
+  // para o modal error
+  showErrorModal = false;
+  errorTitle: string = '';
+  errorMessage: string = '';
+  errorDetails?: string;
   
   constructor(private extrasService: ExtrasService) { }
 
@@ -76,12 +82,28 @@ export class AdicionaisComponent implements OnInit {
       
       } catch (error: any) {
         console.error('Erro ao excluir item adicional:', error);
-        alert('Não foi possível excluir o item adicional. Tente novamente.');
+        this.showDeleteModal = false;
+        this.showError(
+          'Não foi possível excluir',
+          'O item adicional não pôde ser removido. Ele pode estar sendo utilizado em algum produto.',
+          );
       }
  }
 
   cancelDelete() {
     this.showDeleteModal = false;
     this.extraToDelete = undefined;
+  }
+
+  private showError(title: string, message: string) {
+    this.errorTitle = title;
+    this.errorMessage = message;
+    
+    this.showErrorModal = true;
+  }
+
+  fecharErrorModal() {
+    this.showErrorModal = false;
+    this.errorDetails = undefined;
   }
 }
