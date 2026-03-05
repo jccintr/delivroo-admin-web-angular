@@ -69,17 +69,19 @@
                 
                 <!-- Nome + descrição (se existir) -->
                 <td class="px-6 py-4">
-                  <div class="flex flex-row">
+
+                  <div class="flex flex-row items-center">
                       @if(produto.imagem!==null){
                           <img [src]="getStorageUrl() + produto.imagem" alt="{{ produto.nome }}" class="w-12 h-12 rounded object-cover mr-4">
                       }
                       <div> 
                         <div class="font-medium text-gray-900">{{ produto.nome }}</div>
-                        <div *ngIf="produto.descricao" class="text-sm text-gray-500 mt-0.5 line-clamp-2">
-                            {{ produto.descricao }}
-                        </div>
+                            <div *ngIf="produto.descricao" class="text-sm text-gray-500 mt-0.5 line-clamp-2">
+                                {{ produto.descricao }}
+                            </div>
                       </div>
                   </div>
+
                 </td>
 
                 <!-- Preço -->
