@@ -6,7 +6,7 @@
         </div>
         <button 
             (click)="novoObrigatorio()"
-            class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white font-medium rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
+            class="inline-flex items-center px-5 py-2.5 bg-primary text-white font-medium rounded-lg shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
             <span class="material-icons mr-2 text-lg">add</span>
             Novo Obrigatório
         </button>
@@ -61,6 +61,13 @@
                                 class="text-indigo-600 hover:text-indigo-900 transition">
                                 <span class="material-icons">edit</span>
                             </button>
+                             <button 
+                                (click)="excluirObrigatorio(obrigatorio)"
+                                class="text-red-600 hover:text-red-900 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                                title="Excluir Obrigatório" 
+                             >
+                                <span class="material-icons">delete_outline</span>
+                            </button>
                             
                         </td>
                     </tr>
@@ -70,6 +77,30 @@
         </div>
    }
 </div>
+@if (showModal) {
+  <app-modal-obrigatorio
+    [isEditMode]="modalMode === 'edit'"
+    [obrigatorioToEdit]="selectedObrigatorio"
+    (close)="fecharModal()"
+    (saved)="onObrigatorioSaved()"
+  ></app-modal-obrigatorio>
+}
+@if (showDeleteModal) {
+  <app-modal-delete
+    [title]="'Excluir Obrigatório'"
+    [message]="'Tem certeza que deseja excluir este item obrigatório?'"
+    [itemName]="obrigatorioToDelete?.nome || ''"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()"
+  ></app-modal-delete>
+}
+@if (showErrorModal) {
+  <app-modal-error
+    [title]="errorTitle"
+    [message]="errorMessage"
+    (close)="fecharErrorModal()"
+  ></app-modal-error>
+}
 
 
 

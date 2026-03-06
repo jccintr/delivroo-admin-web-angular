@@ -2,10 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ObrigatoriosResponse } from '../../models/obrigatorios/obrigatorios-response.interface';
 import { ObrigatoriosService } from '../../services/obrigatorios.service';
 import { firstValueFrom } from 'rxjs';
+import { ModalObrigatorioComponent } from "../../components/modals/modal-obrigatorio/modal-obrigatorio.component";
+import { ModalDeleteComponent } from "../../components/modals/modal-delete/modal-delete.component";
+import { ModalErrorComponent } from "../../components/modals/modal-error/modal-error.component";
 
 @Component({
   selector: 'app-obrigatorios',
-  imports: [],
+  imports: [ModalObrigatorioComponent, ModalDeleteComponent, ModalErrorComponent],
   templateUrl: './obrigatorios.component.html',
   styleUrl: './obrigatorios.component.css'
 })
@@ -16,8 +19,13 @@ export class ObrigatoriosComponent implements OnInit {
     modalMode: 'create' | 'edit' = 'create';
     selectedObrigatorio?: ObrigatoriosResponse
     showDeleteModal = false;
-    extraToDelete?: ObrigatoriosResponse;
+    obrigatorioToDelete?: ObrigatoriosResponse;
     loading = true;
+    // para o modal error
+    showErrorModal = false;
+    errorTitle: string = '';
+    errorMessage: string = '';
+    errorDetails?: string;
     
     constructor(private obrigatoriosService: ObrigatoriosService) { }
 
@@ -57,6 +65,47 @@ export class ObrigatoriosComponent implements OnInit {
       fecharModal(): void {
           this.showModal = false;
       }
+
+      excluirObrigatorio(obrigatorio: ObrigatoriosResponse) {
+            this.obrigatorioToDelete = obrigatorio;
+            this.showDeleteModal = true;
+     }
+
+     async confirmDelete() {
+      if (!this.obrigatorioToDelete) return;
+
+      try {
+        await firstValueFrom(this.obrigatoriosService.deleteObrigatorio(this.obrigatorioToDelete.id));
+        
+        this.onObrigatorioSaved(); 
+        this.showDeleteModal = false;
+      
+      } catch (error: any) {
+        console.error('Erro ao excluir item obrigatório:', error);
+        this.showDeleteModal = false;
+        this.showError(
+          'Não foi possível excluir',
+          'O item obrigatório não pôde ser removido. Ele pode estar sendo utilizado em algum produto.',
+          );
+      }
+ }
+
+  cancelDelete() {
+    this.showDeleteModal = false;
+    this.obrigatorioToDelete = undefined;
+  }
+
+  private showError(title: string, message: string) {
+    this.errorTitle = title;
+    this.errorMessage = message;
+    
+    this.showErrorModal = true;
+  }
+
+  fecharErrorModal() {
+    this.showErrorModal = false;
+    this.errorDetails = undefined;
+  }
   
 
 }
