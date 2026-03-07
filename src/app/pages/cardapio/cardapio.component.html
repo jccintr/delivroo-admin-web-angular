@@ -118,7 +118,7 @@
                   </button>
                   
                   <button 
-                    (click)="excluirProduto(produto.id)"
+                    (click)="excluirProduto(produto)"
                     title="Excluir produto"
                     class="text-red-600 hover:text-red-900 transition">
                     <span class="material-icons">delete_outline</span>
@@ -145,3 +145,19 @@
     Total de produtos: <span class="font-semibold text-gray-900">{{ totalProdutos() }}</span>
   </div>
 </div>
+@if (showDeleteModal) {
+  <app-modal-delete
+    [title]="'Excluir Produto'"
+    [message]="'Tem certeza que deseja excluir este produto?'"
+    [itemName]="productToDelete?.nome || ''"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()"
+  ></app-modal-delete>
+}
+@if (showErrorModal) {
+  <app-modal-error
+    [title]="errorTitle"
+    [message]="errorMessage"
+    (close)="fecharErrorModal()"
+  ></app-modal-error>
+}

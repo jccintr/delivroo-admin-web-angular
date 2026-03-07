@@ -5,6 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import { ModalObrigatorioComponent } from "../../components/modals/modal-obrigatorio/modal-obrigatorio.component";
 import { ModalDeleteComponent } from "../../components/modals/modal-delete/modal-delete.component";
 import { ModalErrorComponent } from "../../components/modals/modal-error/modal-error.component";
+import { ErrorService } from '../../services/error.service';
 
 @Component({
   selector: 'app-obrigatorios',
@@ -27,7 +28,7 @@ export class ObrigatoriosComponent implements OnInit {
     errorMessage: string = '';
     errorDetails?: string;
     
-    constructor(private obrigatoriosService: ObrigatoriosService) { }
+    constructor(private obrigatoriosService: ObrigatoriosService,private errorService: ErrorService) { }
 
      async ngOnInit(): Promise<void> {
           await this.loadObrigatorios();
@@ -83,10 +84,7 @@ export class ObrigatoriosComponent implements OnInit {
       } catch (error: any) {
         console.error('Erro ao excluir item obrigatório:', error);
         this.showDeleteModal = false;
-        this.showError(
-          'Não foi possível excluir',
-          'O item obrigatório não pôde ser removido. Ele pode estar sendo utilizado em algum produto.',
-          );
+        this.showError('Não foi possível excluir',this.errorService.getApiErrorMessage(error),);
       }
  }
 
