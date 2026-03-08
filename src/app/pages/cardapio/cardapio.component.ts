@@ -9,10 +9,12 @@ import { ProdutosCategory } from '../../models/categorias/produtos-category.inte
 import { ModalDeleteComponent } from "../../components/modals/modal-delete/modal-delete.component";
 import { ModalErrorComponent } from "../../components/modals/modal-error/modal-error.component";
 import { ErrorService } from '../../services/error.service';
+import { ModalNovoProdutoComponent } from "../../components/modals/modal-novo-produto/modal-novo-produto.component";
+import { ModalUpdateProdutoComponent } from "../../components/modals/modal-update-produto/modal-update-produto.component";
 
 @Component({
   selector: 'app-cardapio',
-  imports: [CommonModule, ModalDeleteComponent, ModalErrorComponent],
+  imports: [CommonModule, ModalDeleteComponent, ModalErrorComponent, ModalNovoProdutoComponent, ModalUpdateProdutoComponent],
   templateUrl: './cardapio.component.html',
   styleUrl: './cardapio.component.css'
 })
@@ -31,6 +33,11 @@ export class CardapioComponent implements OnInit {
   errorTitle: string = '';
   errorMessage: string = '';
   errorDetails?: string;
+  // modal novo produto
+  showNovoProdutoModal = false;
+  // modal update produto
+  showUpdateProdutoModal = false;
+  productToEdit?: any;
      
 
    constructor(private categoryService: CategoryService,private productService: ProductService,private errorService: ErrorService) { }
@@ -58,13 +65,12 @@ export class CardapioComponent implements OnInit {
 
   // Funções de ação (implementar depois ou criar modais)
   novoProduto(): void {
-    alert('Funcionalidade de criar novo produto - implementar modal');
-    // Futuro: abrir modal de criação
+    this.showNovoProdutoModal = true;
   }
 
-  editarProduto(produtoId: number): void {
-    alert(`Editar produto ID: ${produtoId}`);
-    // Futuro: abrir modal de edição
+  editarProduto(produto: ProdutosCategory): void {
+    this.productToEdit = produto;
+    this.showUpdateProdutoModal = true;
   }
 
   async clonarProduto(produtoId: number): Promise<void> {
@@ -129,6 +135,35 @@ export class CardapioComponent implements OnInit {
     this.showErrorModal = false;
     this.errorDetails = undefined;
   }
+
+  onProdutoModalClosed(): void {
+     this.showNovoProdutoModal = false;
+  }
+
+  onProdutoSalvo(): void {
+    this.loadProducts();          
+    this.showNovoProdutoModal = false;
+  }
+
+  async onToggleAtivo(productId: number): Promise<void> {
+    try {
+      await firstValueFrom(this.productService.toggleAtivo(productId));
+      this.loadProducts();
+    } catch (error) {
+      console.error('Erro ao atualizar Status de Ativo:', error);
+    } 
+  }
+
+  onUpdateModalClosed(): void {
+  this.showUpdateProdutoModal = false;
+  this.productToEdit = undefined;
+}
+
+onUpdateSalvo(): void {
+  this.loadProducts();
+  this.showUpdateProdutoModal = false;
+  this.productToEdit = undefined;
+}
 
  
 

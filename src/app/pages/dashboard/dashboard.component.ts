@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
          this.faturamentoTotal.set(this.dashboardData.faturamento);
          this.lojaAberta.set(this.dashboardData.aberto);
          this.tempoEspera.set(this.dashboardData.tempo_espera);
-         console.log('Dashboard data:', this.dashboardData);
+        
        } catch (error) {
          console.error('Erro ao carregar dados do dashboard:', error);
        } finally {
@@ -53,7 +53,7 @@ export class DashboardComponent implements OnInit {
     try {
       const response = await firstValueFrom(this.storeService.toggleStoreStatus());
       this.lojaAberta.set(response.aberto);
-      console.log('Status da loja atualizado:', response);
+      
     } catch (error) {
       console.error('Erro ao atualizar status da loja:', error);
     } 

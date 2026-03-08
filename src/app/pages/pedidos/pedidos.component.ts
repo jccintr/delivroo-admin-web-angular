@@ -31,7 +31,7 @@ export class PedidosComponent implements OnInit {
 
      try {
           this.pedidos = await firstValueFrom(this.storeService.getPedidos());
-          console.log('Pedidos:', this.pedidos);
+         // console.log('Pedidos:', this.pedidos);
     } catch (error) {
           console.error('Erro ao carregar pedidos:', error);
     } finally {
@@ -43,7 +43,7 @@ export class PedidosComponent implements OnInit {
   visualizarPedido(pedido: PedidosResponse) {
     /*
   // Exemplo: abrir modal, navegar para detalhe, etc.
-  console.log('Visualizar pedido:', pedido);
+  
   // this.router.navigate(['/pedidos', pedido.id]);
   // ou abrir um modal com mais detalhes
   */

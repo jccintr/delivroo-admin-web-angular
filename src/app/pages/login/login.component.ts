@@ -33,9 +33,6 @@ export class LoginComponent {
 
   async onLogin(): Promise<void> {
      this.errorMessage = null;
-     console.log('Login button clicked');
-     console.log('Email:', this.email());
-     console.log('Password:', this.password());
      if(!this.email() || !this.password()) {
           this.errorMessage = 'Por favor, preencha todos os campos.';  
           return;  
@@ -48,8 +45,6 @@ export class LoginComponent {
       this.email.set('');
       this.password.set('');
       this.router.navigate(['/dashboard'], { replaceUrl: true });
-      console.log('Login successful:', this.loginResponse);
-      console.log('Login response:', this.loginResponse);
     } catch (error) {
       console.error('Erro ao fazer login:', error);
       this.errorMessage = 'E-mail e ou senha inválidos.';

@@ -22,7 +22,7 @@ export class ReceiptComponent {
       return;
     }
 
-    console.log('Imprimindo pedido:', this.pedido);
+    
 
     // Monta o HTML completo dinamicamente
     const htmlContent = `

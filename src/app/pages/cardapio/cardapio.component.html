@@ -91,6 +91,7 @@
 
                 <!-- Ativo -->
                 <td class="px-6 py-4 text-center">
+                  <button  (click)="onToggleAtivo(produto.id)">
                   <span 
                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                     [ngClass]="{
@@ -99,12 +100,13 @@
                     }">
                     {{ produto.ativo ? 'Ativo' : 'Inativo' }}
                   </span>
+                  </button>
                 </td>
 
                 <!-- Ações -->
                 <td class="px-6 py-4 text-right text-sm space-x-3">
                   <button 
-                    (click)="editarProduto(produto.id)"
+                    (click)="editarProduto(produto)"
                     title="Editar produto"
                     class="text-indigo-600 hover:text-indigo-900 transition">
                     <span class="material-icons">edit</span>
@@ -145,6 +147,19 @@
     Total de produtos: <span class="font-semibold text-gray-900">{{ totalProdutos() }}</span>
   </div>
 </div>
+@if (showNovoProdutoModal) {
+  <app-modal-novo-produto
+    (close)="onProdutoModalClosed()"
+    (saved)="onProdutoSalvo()"
+  ></app-modal-novo-produto>
+}
+@if (showUpdateProdutoModal) {
+  <app-modal-update-produto
+    [productToEdit]="productToEdit"
+    (close)="onUpdateModalClosed()"
+    (saved)="onUpdateSalvo()"
+  ></app-modal-update-produto>
+}
 @if (showDeleteModal) {
   <app-modal-delete
     [title]="'Excluir Produto'"

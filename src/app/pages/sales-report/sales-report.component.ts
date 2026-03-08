@@ -119,7 +119,6 @@ export class SalesReportComponent implements OnInit, AfterViewInit {
     this.selectedMonth = monthYear.month;
     this.selectedYear = monthYear.year; 
     this.nomeMes = monthYear.label.split('/')[0];
-    console.log('Período atualizado para:', monthYear);
     this.gerarRelatorio( monthYear.month, monthYear.year);
   }
 
