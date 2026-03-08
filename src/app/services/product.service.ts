@@ -4,6 +4,10 @@ import { API_BASE_URL } from '../constants/api.constants';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { AddProductRequest } from '../models/produtos/add-product-request.interface';
+import { ProdutoAdicionaisResponse } from '../models/produtos/produto-adicionais-response.interface';
+import { ProdutoObrigatoriosResponse } from '../models/produtos/produto-obrigatorios-response.interface';
+import { ProdutoExtrasRequest } from '../models/adicionais/produto-extras-request.interface';
+import { ProdutoObrigatorioRequest } from '../models/obrigatorios/produto-obrigatorio-request.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +18,7 @@ export class ProductService {
 
   constructor(private http: HttpClient,private authService: AuthService) {}
 
-   addProduct(product: AddProductRequest): Observable<any> {
+  addProduct(product: AddProductRequest): Observable<any> {
 
       const formData = new FormData();
       formData.append('nome', product.nome);
@@ -82,4 +86,65 @@ export class ProductService {
         },
       }); 
   }
+
+  getAdicionais(productId: number) : Observable<ProdutoAdicionaisResponse[]> {
+      return this.http.get<ProdutoAdicionaisResponse[]>(`${this.BASE_API}/produtos/${productId}/adicionais`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.authService.token()
+        },
+      }); 
+    }
+  getObrigatorios(productId: number) : Observable<ProdutoObrigatoriosResponse[]> {
+      return this.http.get<ProdutoObrigatoriosResponse[]>(`${this.BASE_API}/produtos/${productId}/obrigatorios`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.authService.token()
+        },
+      }); 
+    }
+
+   addExtra(request: ProdutoExtrasRequest): Observable<any> {
+          return this.http.post<any>(`${this.BASE_API}/produtoadicional`, request, {
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + this.authService.token()
+            },
+          }); 
+   } 
+
+    addObrigatorios(request: ProdutoObrigatorioRequest): Observable<any> {
+          return this.http.post<any>(`${this.BASE_API}/produtoobrigatorio`, request, {
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + this.authService.token()
+            },
+          }); 
+   } 
+
+    deleteExtra(extraId: number): Observable<any> {
+      return this.http.delete<any>(`${this.BASE_API}/produtoadicional/${extraId}`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.authService.token()
+        },
+      }); 
+    }
+
+    deleteObrigatorio(obrigatorioId: number): Observable<any> {
+      return this.http.delete<any>(`${this.BASE_API}/produtoobrigatorio/${obrigatorioId}`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + this.authService.token()
+        },
+      }); 
+    }
+
+
 }

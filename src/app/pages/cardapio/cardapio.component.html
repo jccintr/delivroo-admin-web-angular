@@ -103,28 +103,68 @@
                   </button>
                 </td>
 
-                <!-- Ações -->
-                <td class="px-6 py-4 text-right text-sm space-x-3">
+               <!-- Ações -->
+                <td class="px-6 py-4 text-right text-sm whitespace-nowrap">
+
+                  <!-- Editar -->
                   <button 
                     (click)="editarProduto(produto)"
                     title="Editar produto"
-                    class="text-indigo-600 hover:text-indigo-900 transition">
+                    class="text-indigo-600 hover:text-indigo-900 transition mr-3">
                     <span class="material-icons">edit</span>
                   </button>
-                  
-                  <button 
-                    (click)="clonarProduto(produto.id)"
-                    title="Clonar produto"
-                    class="text-blue-600 hover:text-blue-900 transition">
-                    <span class="material-icons">content_copy</span>
-                  </button>
-                  
+
+                  <!-- Excluir -->
                   <button 
                     (click)="excluirProduto(produto)"
                     title="Excluir produto"
-                    class="text-red-600 hover:text-red-900 transition">
+                    class="text-red-600 hover:text-red-900 transition mr-3">
                     <span class="material-icons">delete_outline</span>
                   </button>
+
+                  <!-- Ícone de "Mais" que abre o menu -->
+                  <div class="relative inline-block text-left">
+                    <button 
+                      (click)="toggleMenu(produto.id)"
+                      title="Mais ações"
+                      class="text-gray-600 hover:text-gray-900 transition focus:outline-none">
+                      <span class="material-icons">more_vert</span>
+                    </button>
+
+                    <!-- O menu dropdown (só aparece quando aberto) -->
+                    <div 
+                      *ngIf="openMenuId === produto.id"
+                      class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50"
+                      (clickOutside)="closeMenu()"
+                    >
+                      <div class="py-1">
+                        <!-- Adicionais -->
+                        <button 
+                          (click)="abrirAdicionais(produto); closeMenu()"
+                          class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                          <span class="material-icons mr-3 text-gray-500">add_circle</span>
+                          Adicionais
+                        </button>
+
+                        <!-- Clonar (se não quiser deixar como ícone direto) -->
+                        <button 
+                          (click)="clonarProduto(produto.id); closeMenu()"
+                          class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                          <span class="material-icons mr-3 text-gray-500">content_copy</span>
+                          Clonar produto
+                        </button>
+
+                        <!-- Outra ação futura (exemplo) -->
+                        <!--
+                        <button 
+                          class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                          <span class="material-icons mr-3 text-gray-500">visibility</span>
+                          Ver detalhes
+                        </button>
+                        -->
+                      </div>
+                    </div>
+                  </div>
                 </td>
               </tr>
 
@@ -175,4 +215,11 @@
     [message]="errorMessage"
     (close)="fecharErrorModal()"
   ></app-modal-error>
+}
+@if (showAdicionaisModal && selectedProdutoId) {
+  <app-modal-produto-extras
+    [produtoId]="selectedProdutoId"
+    [produtoNome]="selectedProdutoNome"
+    (close)="showAdicionaisModal = false"
+  ></app-modal-produto-extras>
 }

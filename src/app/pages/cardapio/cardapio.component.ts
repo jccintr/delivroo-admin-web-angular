@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CategoryResponse } from '../../models/categorias/category-reponse.interface';
 import { CommonModule } from '@angular/common';
@@ -11,10 +11,11 @@ import { ModalErrorComponent } from "../../components/modals/modal-error/modal-e
 import { ErrorService } from '../../services/error.service';
 import { ModalNovoProdutoComponent } from "../../components/modals/modal-novo-produto/modal-novo-produto.component";
 import { ModalUpdateProdutoComponent } from "../../components/modals/modal-update-produto/modal-update-produto.component";
+import { ModalProdutoExtrasComponent } from "../../components/modals/modal-produto-extras/modal-produto-extras.component";
 
 @Component({
   selector: 'app-cardapio',
-  imports: [CommonModule, ModalDeleteComponent, ModalErrorComponent, ModalNovoProdutoComponent, ModalUpdateProdutoComponent],
+  imports: [CommonModule, ModalDeleteComponent, ModalErrorComponent, ModalNovoProdutoComponent, ModalUpdateProdutoComponent, ModalProdutoExtrasComponent],
   templateUrl: './cardapio.component.html',
   styleUrl: './cardapio.component.css'
 })
@@ -38,6 +39,12 @@ export class CardapioComponent implements OnInit {
   // modal update produto
   showUpdateProdutoModal = false;
   productToEdit?: any;
+  // modal adicionais
+  showAdicionaisModal = false;
+  selectedProdutoId: number | null = null;
+  selectedProdutoNome: string = '';
+
+  openMenuId: number | null = null;
      
 
    constructor(private categoryService: CategoryService,private productService: ProductService,private errorService: ErrorService) { }
@@ -163,6 +170,34 @@ onUpdateSalvo(): void {
   this.loadProducts();
   this.showUpdateProdutoModal = false;
   this.productToEdit = undefined;
+}
+
+// metodos do menu popup
+// Métodos novos
+toggleMenu(produtoId: number): void {
+  if (this.openMenuId === produtoId) {
+    this.closeMenu();
+  } else {
+    this.openMenuId = produtoId;
+  }
+}
+
+closeMenu(): void {
+  this.openMenuId = null;
+}
+
+abrirAdicionais(produto: ProdutosCategory): void {
+  this.selectedProdutoId = produto.id;
+  this.selectedProdutoNome = produto.nome;
+  this.showAdicionaisModal = true;
+}
+
+// fecha o menu ao clicar fora
+@HostListener('document:click', ['$event'])
+onDocumentClick(event: Event) {
+  if (this.openMenuId !== null && !(event.target as HTMLElement).closest('.relative')) {
+    this.closeMenu();
+  }
 }
 
  
