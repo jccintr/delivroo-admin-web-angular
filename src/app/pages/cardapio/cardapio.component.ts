@@ -12,10 +12,11 @@ import { ErrorService } from '../../services/error.service';
 import { ModalNovoProdutoComponent } from "../../components/modals/modal-novo-produto/modal-novo-produto.component";
 import { ModalUpdateProdutoComponent } from "../../components/modals/modal-update-produto/modal-update-produto.component";
 import { ModalProdutoExtrasComponent } from "../../components/modals/modal-produto-extras/modal-produto-extras.component";
+import { ModalProdutoObrigatoriosComponent } from "../../components/modals/modal-produto-obrigatorios/modal-produto-obrigatorios.component";
 
 @Component({
   selector: 'app-cardapio',
-  imports: [CommonModule, ModalDeleteComponent, ModalErrorComponent, ModalNovoProdutoComponent, ModalUpdateProdutoComponent, ModalProdutoExtrasComponent],
+  imports: [CommonModule, ModalDeleteComponent, ModalErrorComponent, ModalNovoProdutoComponent, ModalUpdateProdutoComponent, ModalProdutoExtrasComponent, ModalProdutoObrigatoriosComponent],
   templateUrl: './cardapio.component.html',
   styleUrl: './cardapio.component.css'
 })
@@ -43,6 +44,8 @@ export class CardapioComponent implements OnInit {
   showAdicionaisModal = false;
   selectedProdutoId: number | null = null;
   selectedProdutoNome: string = '';
+  // modal obrigatorios
+  showObrigatoriosModal = false;
 
   openMenuId: number | null = null;
      
@@ -190,6 +193,12 @@ abrirAdicionais(produto: ProdutosCategory): void {
   this.selectedProdutoId = produto.id;
   this.selectedProdutoNome = produto.nome;
   this.showAdicionaisModal = true;
+}
+
+abrirObrigatorios(produto: ProdutosCategory): void {
+  this.selectedProdutoId = produto.id;
+  this.selectedProdutoNome = produto.nome;
+  this.showObrigatoriosModal = true;
 }
 
 // fecha o menu ao clicar fora

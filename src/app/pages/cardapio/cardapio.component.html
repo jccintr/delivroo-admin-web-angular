@@ -146,6 +146,13 @@
                           Adicionais
                         </button>
 
+                        <button 
+                          (click)="abrirObrigatorios(produto); closeMenu()"
+                          class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                          <span class="material-icons mr-3 text-gray-500">check_circle</span>
+                          Selecionáveis
+                        </button>
+
                         <!-- Clonar (se não quiser deixar como ícone direto) -->
                         <button 
                           (click)="clonarProduto(produto.id); closeMenu()"
@@ -222,4 +229,11 @@
     [produtoNome]="selectedProdutoNome"
     (close)="showAdicionaisModal = false"
   ></app-modal-produto-extras>
+}
+@if (showObrigatoriosModal && selectedProdutoId) {
+  <app-modal-produto-obrigatorios
+    [produtoId]="selectedProdutoId"
+    [produtoNome]="selectedProdutoNome"
+    (close)="showObrigatoriosModal = false"
+  ></app-modal-produto-obrigatorios>
 }

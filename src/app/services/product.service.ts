@@ -116,7 +116,7 @@ export class ProductService {
           }); 
    } 
 
-    addObrigatorios(request: ProdutoObrigatorioRequest): Observable<any> {
+    addObrigatorio(request: ProdutoObrigatorioRequest): Observable<any> {
           return this.http.post<any>(`${this.BASE_API}/produtoobrigatorio`, request, {
             headers: {
               Accept: 'application/json',
