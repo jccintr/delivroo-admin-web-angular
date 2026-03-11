@@ -5,6 +5,7 @@ import { ExtrasResponse } from '../../../models/adicionais/extras-response.inter
 import { ProdutoExtrasRequest } from '../../../models/adicionais/produto-extras-request.interface';
 import { ExtrasService } from '../../../services/extras.service';
 import { ProductService } from '../../../services/product.service';
+import { ProdutoAdicionaisResponse } from '../../../models/produtos/produto-adicionais-response.interface';
 
 @Component({
   selector: 'app-modal-produto-extras',
@@ -23,6 +24,7 @@ export class ModalProdutoExtrasComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
 
   extras: ExtrasResponse[] = [];               // Todos os extras disponíveis no sistema
+  produtoAdicionais: ProdutoAdicionaisResponse[] = [];
   associados = new Set<number>();              // IDs dos extras já associados a este produto
   salvandoIds = new Set<number>();            // IDs em processo de salvamento
   loading = true;
@@ -48,9 +50,10 @@ export class ModalProdutoExtrasComponent implements OnInit {
 
       // 2. Carrega os extras já associados a este produto
       // Nota: assumindo que getAdicionais retorna os adicionais já vinculados ao produto
-      const associadosResponse = await firstValueFrom(
-        this.productService.getAdicionais(this.produtoId)
-      );
+      const associadosResponse = await firstValueFrom(this.productService.getAdicionais(this.produtoId));
+      console.log('Adicionais associados ao produto:', associadosResponse);
+      this.produtoAdicionais = associadosResponse || [];
+      console.log('Adicionais associados ao produto (após atribuição):', this.produtoAdicionais);
 
       // Marca os IDs que já estão associados
       associadosResponse?.forEach(item => {
@@ -76,9 +79,12 @@ export class ModalProdutoExtrasComponent implements OnInit {
     try {
       if (estavaAssociado) {
         // Desassociar: deleteExtra (remove a associação produto-adicional)
-        await firstValueFrom(
-          this.productService.deleteExtra(extraId)  // Atenção: aqui extraId é o ID do pivot (associação)
-        );
+        console.log('Desassociando adicional ID:', extraId);
+        const produtoAdicionalId = this.produtoAdicionais.find(o => o.id === extraId)?.produto_adicional_id;
+        console.log('ProdutoAdicionalId encontrado para desassociação:', produtoAdicionalId);
+         if(produtoAdicionalId) {
+            await firstValueFrom(this.productService.deleteExtra(produtoAdicionalId));  // Atenção: aqui extraId é o ID do pivot (associação)
+         }
         this.associados.delete(extraId);
       } else {
         // Associar
@@ -86,9 +92,7 @@ export class ModalProdutoExtrasComponent implements OnInit {
           produto_id: this.produtoId,
           adicional_id: extraId
         };
-        await firstValueFrom(
-          this.productService.addExtra(request)
-        );
+        await firstValueFrom(this.productService.addExtra(request));
         this.associados.add(extraId);
       }
     } catch (error: any) {

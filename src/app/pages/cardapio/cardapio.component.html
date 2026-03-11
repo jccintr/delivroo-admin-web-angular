@@ -138,6 +138,15 @@
                       (clickOutside)="closeMenu()"
                     >
                       <div class="py-1">
+                        
+                        <!-- Obrigatórios -->
+                        <button 
+                          (click)="abrirObrigatorios(produto); closeMenu()"
+                          class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                          <span class="material-icons mr-3 text-gray-500">check_circle</span>
+                          Selecionáveis
+                        </button>
+
                         <!-- Adicionais -->
                         <button 
                           (click)="abrirAdicionais(produto); closeMenu()"
@@ -146,12 +155,7 @@
                           Adicionais
                         </button>
 
-                        <button 
-                          (click)="abrirObrigatorios(produto); closeMenu()"
-                          class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
-                          <span class="material-icons mr-3 text-gray-500">check_circle</span>
-                          Selecionáveis
-                        </button>
+                        
 
                         <!-- Clonar (se não quiser deixar como ícone direto) -->
                         <button 
