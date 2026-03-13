@@ -3,14 +3,11 @@ import { StoreService } from '../../services/store.service';
 import { PedidosResponse } from '../../models/pedidos/pedidos-response.interface';
 import { firstValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { StatusPedido } from '../../models/pedidos/stsatus-pedido.interface';
-import { ModalPedidoComponent } from "../../components/modals/modal-pedido/modal-pedido.component";
-import { ReceiptComponent } from "../../components/receipt/receipt.component";
-import { ModalStatusComponent } from '../../components/modals/modal-status/modal-status.component';
+import { TablePedidosComponent } from "../../components/tables/table-pedidos/table-pedidos.component";
 
 @Component({
   selector: 'app-pedidos',
-  imports: [CommonModule, ModalStatusComponent, ModalPedidoComponent, ReceiptComponent],
+  imports: [CommonModule, TablePedidosComponent],
   templateUrl: './pedidos.component.html',
   styleUrl: './pedidos.component.css'
 })
@@ -18,10 +15,10 @@ export class PedidosComponent implements OnInit {
 
 
   pedidos: PedidosResponse[] = [];
-  showStatusModal = false;
-  selectedPedidoForStatus?: PedidosResponse;
-  showPedidoModal = false;
-  selectedPedido?: PedidosResponse;
+  //showStatusModal = false;
+  //selectedPedidoForStatus?: PedidosResponse;
+  //showPedidoModal = false;
+  //selectedPedido?: PedidosResponse;
   loading = true;
 
    constructor(private storeService: StoreService) { }
@@ -40,15 +37,8 @@ export class PedidosComponent implements OnInit {
 
     }
 
-  visualizarPedido(pedido: PedidosResponse) {
-    /*
-  // Exemplo: abrir modal, navegar para detalhe, etc.
-  
-  // this.router.navigate(['/pedidos', pedido.id]);
-  // ou abrir um modal com mais detalhes
-  */
-}
-
+ 
+/*
 private getTotalExibido(pedido: PedidosResponse): number {
     let total = pedido.total ?? 0;
 
@@ -85,7 +75,7 @@ private getTotalExibido(pedido: PedidosResponse): number {
     this.showStatusModal = true;
   }
 
-  // Callback quando o status é alterado com sucesso
+  
   onStatusChanged(event: { pedidoId: number; novoStatus: StatusPedido }) {
     const pedido = this.pedidos.find(p => p.id === event.pedidoId);
     if (pedido) {
@@ -93,7 +83,7 @@ private getTotalExibido(pedido: PedidosResponse): number {
         ...pedido.status_pedido,
         id: event.novoStatus.id,
         descricao_curta: event.novoStatus.descricao_curta,
-        // se precisar de mais campos → copie conforme a interface
+       
       };
     }
     this.showStatusModal = false;
@@ -102,7 +92,7 @@ private getTotalExibido(pedido: PedidosResponse): number {
 
   
 
-  // Novo método para ação de status (pode usar no lugar ou junto com detalhes)
+  
   alterarStatus(pedido: PedidosResponse) {
     this.abrirModalStatus(pedido);
   }
@@ -117,7 +107,7 @@ private getTotalExibido(pedido: PedidosResponse): number {
     this.selectedPedido = undefined;
  }
 
-
+*/
   }
 
 

@@ -23,4 +23,13 @@ export class OrderService {
          },
        }); 
      }
+  getOrdersByDay(data:string) : Observable<PedidosResponse[]> {
+       return this.http.get<PedidosResponse[]>(`${this.BASE_API}/pedidos/dia?data=${data}`, {
+         headers: {
+           Accept: 'application/json',
+           'Content-Type': 'application/json',
+           'Authorization': 'Bearer ' + this.authService.token()
+         },
+       }); 
+     }
 }
