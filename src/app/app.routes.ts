@@ -10,6 +10,7 @@ import { TaxasComponent } from './pages/taxas/taxas.component';
 import { ObrigatoriosComponent } from './pages/obrigatorios/obrigatorios.component';
 import { AdicionaisComponent } from './pages/adicionais/adicionais.component';
 import { SalesReportComponent } from './pages/sales-report/sales-report.component';
+import { PedidosDiaComponent } from './pages/pedidos-dia/pedidos-dia.component';
 
 export const routes: Routes = [
    
@@ -52,6 +53,10 @@ export const routes: Routes = [
        {
         path: 'report',
         component: SalesReportComponent
+      },
+      {
+        path: 'orders-day',
+        component: PedidosDiaComponent
       }
     ]
    }, 

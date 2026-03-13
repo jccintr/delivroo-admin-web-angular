@@ -1,0 +1,56 @@
+<div class="p-6 lg:p-8 min-h-screen bg-gray-50">
+  <div class="mb-8">
+    <h1 class="text-2xl lg:text-3xl font-bold text-gray-800">Pedidos por Dia</h1>
+    <p class="text-gray-600 mt-1">Visualize os pedidos de um dia específico</p>
+  </div>
+
+  <!-- Seletor de data -->
+  <div class="mb-8 flex flex-wrap items-center gap-4">
+    <div class="flex items-center gap-3 bg-white rounded-lg border border-gray-300 px-4 py-2 shadow-sm">
+      <button 
+        (click)="navegarDias(-1)"
+        [disabled]="dataSelecionada <= dataMinimaPermitida"
+        class="text-gray-600 hover:text-indigo-600 disabled:opacity-40 disabled:cursor-not-allowed"
+        title="Dia anterior"
+      >
+        <span class="material-icons text-2xl">chevron_left</span>
+      </button>
+
+      <input 
+        type="date" 
+        [(ngModel)]="dataSelecionada"
+        (ngModelChange)="onDataChange()"
+        [max]="dataAtual"
+        [min]="dataMinimaPermitida"
+        class="text-lg font-medium text-center bg-transparent focus:outline-none w-40"
+      />
+
+      <button 
+        (click)="navegarDias(1)"
+        [disabled]="ehDiaAtual"
+        class="text-gray-600 hover:text-indigo-600 disabled:opacity-40 disabled:cursor-not-allowed"
+        title="Próximo dia (máx hoje)"
+      >
+        <span class="material-icons text-2xl">chevron_right</span>
+      </button>
+    </div>
+
+   
+
+    <button 
+      *ngIf="!ehDiaAtual"
+      (click)="dataSelecionada = dataAtual; onDataChange()"
+      class="ml-auto text-indigo-600 hover:text-indigo-800 font-medium"
+    >
+      Voltar para hoje
+    </button>
+  </div>
+
+  <!-- Tabela de pedidos -->
+  <app-table-pedidos 
+    [pedidos]="pedidos"
+    [loading]="loading"
+  ></app-table-pedidos>
+
+ 
+</div>
