@@ -37,6 +37,14 @@ export class PedidosComponent implements OnInit {
 
     }
 
+
+  async refresh() {
+     this.loading = true;
+     this.pedidos = await firstValueFrom(this.storeService.getPedidos());
+     this.loading = false;
+  // alert('Refresh clicked! Implement the refresh logic here.');
+  }
+
  
 /*
 private getTotalExibido(pedido: PedidosResponse): number {

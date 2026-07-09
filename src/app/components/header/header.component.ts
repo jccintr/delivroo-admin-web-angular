@@ -10,5 +10,5 @@ export class HeaderComponent {
 
    @Input() logotipo: string | null = null;
    @Input() storeName: string | null = null;
-
+  
 }
