@@ -7,6 +7,7 @@ import { CategoryRequest } from '../models/categorias/category-request.interface
 import { ProdutosCategory } from '../models/categorias/produtos-category.interface';
 import { signal } from '@angular/core';
 
+
 describe('CategoryService', () => {
   let service: CategoryService;
   let httpMock: HttpTestingController;
@@ -51,14 +52,6 @@ describe('CategoryService', () => {
     pizza: false
   }
 
-  const mockCategoryResponse: CategoryResponse = {
-     id: 1,
-     user_id: 2,
-     nome: "Sobremesas",
-     position: 3,
-     produtos: [mockProduct1, mockProduct2]
-  };
-
   const mockCategories: CategoryResponse[] = [
     {
      id: 1,
@@ -97,25 +90,25 @@ describe('CategoryService', () => {
   });
 
   it('should get categories with correct headers', () => {
-   
-
     service.getCategories().subscribe(response => {
       expect(response).toEqual(mockCategories);
+      expect(response[0].produtos[0].nome).toEqual("Produto 1");
+      expect(response[0].produtos.length).toEqual(2);
     });
+    
 
     const req = httpMock.expectOne(`${(service as any).BASE_API}/categorias`);
 
     expect(req.request.method).toBe('GET');
     expect(req.request.headers.get('Authorization')).toBe(`Bearer ${mockToken}`);
+   
+   // expect(req.request.body.produtos[0].nome).toEqual('Produto 1');
 
     req.flush(mockCategories);
   });
 
   it('should add category', () => {
-   // const mockRequest: CategoryRequest = { name: 'Nova', description: 'Teste' };
-
     service.addCategory(newCategoryRequest).subscribe();
-
     const req = httpMock.expectOne(`${(service as any).BASE_API}/categorias`);
     expect(req.request.method).toBe('POST');
     expect(req.request.headers.get('Authorization')).toBe(`Bearer ${mockToken}`);
@@ -127,14 +120,11 @@ describe('CategoryService', () => {
   it('should update category', () => {
     const categoryId = 5;
     service.updateCategory(categoryId, updatedCategoryRequest).subscribe();
-
     const req = httpMock.expectOne(`${(service as any).BASE_API}/categorias/${categoryId}`);
-
     expect(req.request.method).toBe('PUT');
     expect(req.request.headers.get('Authorization')).toBe(`Bearer ${mockToken}`);
     expect(req.request.body).toEqual(updatedCategoryRequest);
     expect(req.request.body.nome).toBe('Categoria Atualizada');
-
     req.flush({ success: true });
   });
 
