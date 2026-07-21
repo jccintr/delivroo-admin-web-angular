@@ -96,6 +96,10 @@ export class StoreService {
     return this.authService.currentUser()?.aberto ?? true;
   }
 
+  getSlug(){
+    return this.authService.currentUser()?.slug;
+  }
+
   updateWaitTime(request: UpdateWaitTimeRequest):  Observable<UpdateWaitTimeResponse> {
      return this.http.post<any>(
       `${this.BASE_API}/espera`,

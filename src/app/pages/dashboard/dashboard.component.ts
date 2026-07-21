@@ -3,6 +3,7 @@ import { StoreService } from '../../services/store.service';
 import { firstValueFrom } from 'rxjs';
 import { DashboardResponse } from '../../models/dashboard/dashboard-response.interface';
 import { ModalWaitTimeComponent } from "../../components/modals/modal-wait-time/modal-wait-time.component";
+import { EchoService } from '../../services/echo.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,26 +21,30 @@ export class DashboardComponent implements OnInit {
   pedidosRetirados = signal<number>(0);
   faturamentoTotal = signal<number>(0);
   showWaitTimeModal = signal(false);
-   loading = true;
+  loading = true;
 
-  constructor(private storeService: StoreService) { }
+  constructor(private storeService: StoreService, private echoService: EchoService) { }
   
   async ngOnInit(): Promise<void> {
 
    try {
-         this.dashboardData = await firstValueFrom(this.storeService.getDashboardData());
-         this.pedidosRecebidos.set(this.dashboardData.recebidos);
-         this.pedidosEntregues.set(this.dashboardData.entregues);
-         this.pedidosRetirados.set(this.dashboardData.retirados);
-         this.faturamentoTotal.set(this.dashboardData.faturamento);
-         this.lojaAberta.set(this.dashboardData.aberto);
-         this.tempoEspera.set(this.dashboardData.tempo_espera);
-        
-       } catch (error) {
-         console.error('Erro ao carregar dados do dashboard:', error);
-       } finally {
-          this.loading = false;
-        }
+      this.dashboardData = await firstValueFrom(this.storeService.getDashboardData());
+      this.pedidosRecebidos.set(this.dashboardData.recebidos);
+      this.pedidosEntregues.set(this.dashboardData.entregues);
+      this.pedidosRetirados.set(this.dashboardData.retirados);
+      this.faturamentoTotal.set(this.dashboardData.faturamento);
+      this.lojaAberta.set(this.dashboardData.aberto);
+      this.tempoEspera.set(this.dashboardData.tempo_espera);
+    
+    } catch (error) {
+      console.error('Erro ao carregar dados do dashboard:', error);
+    } finally {
+      this.loading = false;
+  }
+   const slug = this.storeService.getSlug();
+   if (slug !== undefined) {
+     this.echoService.subscribeToPdv(slug);
+   }
      
   }
 
