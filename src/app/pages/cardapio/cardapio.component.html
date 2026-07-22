@@ -111,16 +111,16 @@
                   <button 
                     (click)="editarProduto(produto)"
                     title="Editar produto"
-                    class="text-indigo-600 hover:text-indigo-900 transition mr-3">
-                    <span class="material-icons">edit</span>
+                    class="bg-indigo-600 text-white hover:!bg-indigo-900 py-1 px-2 rounded-full transition mr-2">
+                    <span class="material-icons !text-base ">create</span>
                   </button>
 
                   <!-- Excluir -->
                   <button 
                     (click)="excluirProduto(produto)"
                     title="Excluir produto"
-                    class="text-red-600 hover:text-red-900 transition mr-3">
-                    <span class="material-icons">delete_outline</span>
+                    class="bg-red-600 text-white hover:!bg-red-900 py-1 px-2 rounded-full transition mr-2">
+                    <span class="material-icons !text-base">delete</span>
                   </button>
 
                   <!-- Ícone de "Mais" que abre o menu -->
@@ -129,7 +129,7 @@
                       (click)="toggleMenu(produto.id)"
                       title="Mais ações"
                       class="text-gray-600 hover:text-gray-900 transition focus:outline-none">
-                      <span class="material-icons">more_vert</span>
+                      <span class="material-icons !text-xl">more_vert</span>
                     </button>
 
                     <!-- O menu dropdown (só aparece quando aberto) -->
